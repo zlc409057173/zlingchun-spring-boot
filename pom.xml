@@ -17,8 +17,8 @@
   <name>zlingchun-spring-boot</name>
 
   <modules>
-    <module>./zlingchun-spring-jpa</module>
-    <module>./zlingchun-spring-mybatis</module>
+    <module>zlingchun-spring-jpa</module>
+    <module>zlingchun-spring-mybatis</module>
     <module>zlingchun-spring-jdbc</module>
   </modules>
 
@@ -30,6 +30,8 @@
     <mybatis-version>2.2.2</mybatis-version>
     <druid-start-version>1.2.6</druid-start-version>
     <druid-version>1.2.8</druid-version>
+    <jasypt-version>3.0.3</jasypt-version>
+    <hutool-version>5.7.22</hutool-version>
   </properties>
 
   <dependencyManagement>
@@ -39,18 +41,29 @@
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysql.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>druid-spring-boot-starter</artifactId>
         <version>${druid-start-version}</version>
       </dependency>
-
+      <!-- 数据库密码加密 -->
       <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>druid</artifactId>
-        <version>${druid-version}</version>
+          <groupId>com.github.ulisesbocchio</groupId>
+          <artifactId>jasypt-spring-boot-starter</artifactId>
+          <version>${jasypt-version}</version>
       </dependency>
+      <!-- 自定义数据库密码加密工具辅助包 -->
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-all</artifactId>
+        <version>${hutool-version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-crypto</artifactId>
+        <version>${hutool-version}</version>
+      </dependency>
+
 
       <dependency>
         <groupId>org.mybatis.spring.boot</groupId>

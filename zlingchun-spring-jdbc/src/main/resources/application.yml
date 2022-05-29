@@ -5,10 +5,10 @@ server:
 spring:
   datasource:
     ### JDBC 基本配置 ###
-    username: root
-    password: 12345678
+    username: 4b534be62a6cac9c8491a2b0853afe78
+    password: 3d7c951066a6daae8ca85b899eb6edbf
     driver-class-name: com.mysql.jdbc.Driver   # mysql8 的连接驱动
-    url: jdbc:mysql://119.23.189.235:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: 8d588e7d09d25de807a384c4912e9c084a27c82fe05301f1b619a2eac0c46be6cbd0aaee1feea55217147cc5a3a249bb2c5e1d11ea8c3bc5f2158e0e9ab55883632f03266823e3934539b06ba40954fb8ce2434f16bffe0a22d1c130f0d5158e0c7e62463f2674ad22376d1e15d4424766613c75b63095ba468f91b3225bac1c
     type: com.alibaba.druid.pool.DruidDataSource  # 指定数据源类型
     ### 连接池 配置 ###
     druid:
@@ -87,7 +87,6 @@ spring:
         login-password: 123
         allow: 127.0.0.1  # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
         deny:       # 拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
-
   sql:
     init:
       schemaLocations:
@@ -96,3 +95,7 @@ spring:
         - classpath:sql/data.sql
       encoding: UTF-8
       mode: never
+custom:
+  encrypt:
+    enabled: true
+    secret-key: fa21b79aa3652815c54c683ca627c784

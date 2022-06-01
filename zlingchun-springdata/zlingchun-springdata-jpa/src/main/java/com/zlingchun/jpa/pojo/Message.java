@@ -5,37 +5,33 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
 
 /**
  * @author achun
- * @create 2022/5/31
+ * @create 2022/6/1
  * @description descrip
  */
 @Data
-@ToString
+@ToString(exclude = "customer")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cst_account")
-@EntityListeners(AuditingEntityListener.class)
-public class Account {
+@Table(name = "cst_message")
+public class Message {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "aid")
-    private Long aid;
+    @Column(name = "mid")
+    private Long mid;
 
-    @Column(name = "password", length = 16)
-    private String password;
+    @Column(name = "msg", length = 256)
+    private String msg;
 
-    @Column(name = "username", length = 32, nullable = false)
-    private String username;
-
-    @OneToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

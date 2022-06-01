@@ -5,14 +5,14 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author achun
- * @create 2022/5/31
+ * @create 2022/6/1
  * @description descrip
  */
 @Data
@@ -21,23 +21,19 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cst_account")
-@EntityListeners(AuditingEntityListener.class)
-public class Account {
+@Table(name = "cst_role")
+public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "aid")
-    private Long aid;
+    @Column(name = "rid")
+    private Long rid;
 
-    @Column(name = "password", length = 16)
-    private String password;
+    @Column(name = "role_name")
+    private String roleName;
 
-    @Column(name = "username", length = 32, nullable = false)
-    private String username;
-
-    @OneToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "roles")
+    private List<Customer> customers;
 
     @CreatedBy
     String createdBy;

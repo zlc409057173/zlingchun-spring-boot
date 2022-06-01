@@ -3,6 +3,8 @@ package com.zlingchun.jpa.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -10,6 +12,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Optional;
 
 /**
  * @author achun
@@ -19,6 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableJpaRepositories(basePackages = "com.zlingchun.jpa.repositories")
 @EnableTransactionManagement
+@EnableJpaAuditing
 public class SpringDataJPAConfig {
 
     @Bean
@@ -53,5 +57,16 @@ public class SpringDataJPAConfig {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setDataSource(dataSource());
         return transactionManager;
+    }
+
+    @Bean
+    public AuditorAware<String> auditorAware(){
+        return new AuditorAware<String>() {
+            @Override
+            public Optional getCurrentAuditor() {
+                // 当前用户 session redis 拿取当前用户
+                return Optional.of("admin");
+            }
+        };
     }
 }

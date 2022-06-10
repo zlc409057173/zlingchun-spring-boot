@@ -1,8 +1,9 @@
 server:
   port: 8081
-
 ### 配置数据源 （Druid）###
 spring:
+  profiles:
+    active: prd
   datasource:
     ### JDBC 基本配置 ###
     username: ${DATASOURCE_USERNAME:root}
@@ -93,12 +94,16 @@ spring:
   jpa:
     #控制台显示sql
     show-sql: true
-    generate-ddl: true
+    generate-ddl: false
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       #更新或者创建数据表结构
       ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+#        generate_statistics: true
   sql:
     init:
       schemaLocations:
@@ -107,3 +112,8 @@ spring:
         - classpath:sql/data.sql
       encoding: UTF-8
       mode: never
+logging:
+  level:
+    org:
+      mybatis: debug
+    dao: info

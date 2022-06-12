@@ -99,3 +99,6 @@ custom:
   encrypt:
     enabled: true
     secret-key: fa21b79aa3652815c54c683ca627c784
+  snowflake:
+    machine-id: 1
+    data-center-id: 1

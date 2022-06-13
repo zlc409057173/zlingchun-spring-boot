@@ -37,7 +37,6 @@
     <hutool-version>5.7.22</hutool-version>
     <hibernate-version>5.6.8.Final</hibernate-version>
     <openjpa-version>3.2.0</openjpa-version>
-    <junit-version>4.12</junit-version>
   </properties>
 
   <dependencyManagement>
@@ -93,11 +92,6 @@
         <groupId>com.querydsl</groupId>
         <artifactId>querydsl-jpa</artifactId>
         <version>${querydsl.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit-version}</version>
       </dependency>
       <dependency>
         <groupId>com.querydsl</groupId>

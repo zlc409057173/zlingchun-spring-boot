@@ -22,6 +22,7 @@
     <module>zlingchun-spring-jdbc</module>
       <module>jpa-hibernate</module>
     <module>zlingchun-springdata</module>
+      <module>zlingchun-spring-mail</module>
   </modules>
 
   <properties>

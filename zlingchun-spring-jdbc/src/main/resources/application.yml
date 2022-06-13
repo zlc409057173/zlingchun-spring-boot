@@ -61,7 +61,7 @@ spring:
           enabled: true
           db-type: mysql
           config:
-            delete-allow: false
+            delete-allow: true
             drop-table-allow: false
         # 日志监控，使用slf4j 进行日志输出
         slf4j:

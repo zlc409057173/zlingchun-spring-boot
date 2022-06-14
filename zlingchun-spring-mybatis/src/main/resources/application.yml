@@ -95,6 +95,16 @@ spring:
         - classpath:sql/data.sql
       encoding: UTF-8
       mode: never
+  encrypt:
+    #加密key，必须是16位，代码中使用了右移一位，因此这里必须要配置为32位
+    key: d86d7bab3d6ac01ad9dc6a897652f2d2
+    #是否开启调试模式,默认为false,如果为true则不启用加解密操作
+    debug: false
+    responseEncryptUriList[0]: /save
+    responseEncryptUriList[1]: /decryptEntityXml
+
+    requestDecryptUriList[0]: /save
+    requestDecryptUriList[1]: /update
 jasypt:
   encryptor:
     password: lybgeek

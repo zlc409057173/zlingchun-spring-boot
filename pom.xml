@@ -37,6 +37,7 @@
     <hutool-version>5.7.22</hutool-version>
     <hibernate-version>5.6.8.Final</hibernate-version>
     <openjpa-version>3.2.0</openjpa-version>
+    <cxytiandi-version>1.2.2.RELEASE</cxytiandi-version>
   </properties>
 
   <dependencyManagement>
@@ -97,6 +98,11 @@
         <groupId>com.querydsl</groupId>
         <artifactId>querydsl-apt</artifactId>
         <version>${querydsl.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.cxytiandi</groupId>
+        <artifactId>monkey-api-encrypt-core</artifactId>
+        <version>${cxytiandi-version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

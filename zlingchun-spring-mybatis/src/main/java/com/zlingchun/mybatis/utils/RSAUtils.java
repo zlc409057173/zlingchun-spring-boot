@@ -1,5 +1,7 @@
 package com.zlingchun.mybatis.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +19,7 @@ import java.util.Map;
  * @create 2022/6/14
  * @description descrip
  */
+@Slf4j
 public class RSAUtils {
 
     /**
@@ -125,7 +128,7 @@ public class RSAUtils {
             // 对数据加密
             Cipher cipher = Cipher.getInstance(factory.getAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            byte[] bytes = translate(cipher, data);
+            byte[] bytes = translate(cipher, data, Cipher.ENCRYPT_MODE);
             // 返回加密后由Base64编码的加密信息
             return encryptBase64(bytes);
         } catch (Exception e) {
@@ -151,7 +154,7 @@ public class RSAUtils {
             // 对数据解密
             Cipher cipher = Cipher.getInstance(factory.getAlgorithm());
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            byte[] bytes = translate(cipher, data);
+            byte[] bytes = translate(cipher, data, Cipher.DECRYPT_MODE);
             // 返回UTF-8编码的解密信息
             return new String(bytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
@@ -176,7 +179,7 @@ public class RSAUtils {
             // 对数据加密
             Cipher cipher = Cipher.getInstance(factory.getAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-            byte[] bytes = translate(cipher, data);
+            byte[] bytes = translate(cipher, data, Cipher.ENCRYPT_MODE);
             // 返回加密后由Base64编码的加密信息
             return encryptBase64(bytes);
         } catch (Exception e) {
@@ -201,7 +204,7 @@ public class RSAUtils {
             // 对数据解密
             Cipher cipher = Cipher.getInstance(factory.getAlgorithm());
             cipher.init(Cipher.DECRYPT_MODE, publicKey);
-            byte[] bytes = translate(cipher, data);
+            byte[] bytes = translate(cipher, data, Cipher.DECRYPT_MODE);
             // 返回UTF-8编码的解密信息
             return new String(bytes, StandardCharsets.UTF_8);
         } catch (Exception e) {
@@ -213,23 +216,27 @@ public class RSAUtils {
     /**
      * 对数据分段加密
      */
-    public static byte[] translate(Cipher cipher, byte[] data) throws Exception{
+    public static byte[] translate(Cipher cipher, byte[] data, int mode) throws Exception{
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try{
             int inputLen = data.length;
             int offSet = 0;
             byte[] cache;
             int i = 0;
+            int length = MAX_DECRYPT_BLOCK;
+            if(mode == Cipher.ENCRYPT_MODE){
+                length = MAX_ENCRYPT_BLOCK;
+            }
             // 对数据分段加密
             while (inputLen - offSet > 0) {
-                if (inputLen - offSet > MAX_ENCRYPT_BLOCK) {
-                    cache = cipher.doFinal(data, offSet, MAX_ENCRYPT_BLOCK);
+                if (inputLen - offSet > length) {
+                    cache = cipher.doFinal(data, offSet, length);
                 } else {
                     cache = cipher.doFinal(data, offSet, inputLen - offSet);
                 }
                 out.write(cache, 0, cache.length);
                 i++;
-                offSet = i * MAX_ENCRYPT_BLOCK;
+                offSet = i * length;
             }
             return out.toByteArray();
         }finally {
@@ -329,31 +336,29 @@ public class RSAUtils {
         map = RSAUtils.init();
         String  publicKey= RSAUtils.getPublicKey(map);
         String  privateKey= RSAUtils.getPrivateKey(map);
-        System.out.println("publicKey = " + publicKey);
-        System.out.println("privateKey = " + privateKey);
-        System.out.println("formatStr(publicKey,false) = " + formatStr(publicKey, true));
-        System.out.println("formatStr(privateKey,false) = " + formatStr(privateKey, false));
-        //由前四行代码获得公、私密钥
-        publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlbCn4PsMgvAuTZNOixhiu6sCm9xGFb70Px7PwyJYnCJYW6ycUkXYftAhYS5kX26/0ztY+ypikwOXWmRFDBeRZFv34nq0VSbgwp2FGADsmpSBVHCDbsQADw4w4xyNZ8HSQ7Ymm7GQYJim2HIh6LJTsi0z2RWGfxkAkNAodi7H3Cy9INrV6ByAIfHR/jRd4J67mLier/IHQEUG8Eo/vTTodPeoIRYzH46L9yuzUan7TRQTuNkwzGqb/NlNjGr9jMSRmk8YBqtffekPrnvkLAtBObG5R2G2/OLsggRnwmd5Tv5ws2nWqxDNipLahWboO8DeDsbJgdfxlyHGDohUL2WJZQIDAQAB";
+        log.info("publicKey = " + publicKey);
+        log.info("privateKey = " + privateKey);
+        log.info("formatStr(publicKey,false) = " + formatStr(publicKey, true));
+        log.info("formatStr(privateKey,false) = " + formatStr(privateKey, false));
         String str = "1 InnoDB 支持表锁和行锁，使用索引作为检索条件修改数据时采用行锁，否则采用表锁。\n" +
                 "2 InnoDB 自动给修改操作加锁，给查询操作不自动加锁" +
                 "3 行锁可能因为未使用索引而升级为表锁，所以除了检查索引是否创建的同时，也需要通过explain执行计划查询索引是否被实际使用。, RSA!";
         // 公钥加密，私钥解密
         String enStr1 = RSAUtils.encryptByPublic(str, publicKey);
-        System.out.println("公钥加密后："+enStr1);
+        log.info("公钥加密后："+enStr1);
         String deStr1 = RSAUtils.decryptByPrivate(enStr1, privateKey);
-        System.out.println("私钥解密后："+deStr1);
+        log.info("私钥解密后："+deStr1);
         // 私钥加密，公钥解密
         String enStr2 = RSAUtils.encryptByPrivate(str, privateKey);
-        System.out.println("私钥加密后："+enStr2);
+        log.info("私钥加密后："+enStr2);
         String deStr2 = RSAUtils.decryptByPublic(enStr2, publicKey);
-        System.out.println("公钥解密后："+deStr2);
+        log.info("公钥解密后："+deStr2);
         // 产生签名
         String sign = sign(enStr2, privateKey);
-        System.out.println("签名:"+sign);
+        log.info("签名:"+sign);
         // 验证签名
         boolean status = verify(enStr2, publicKey, sign);
-        System.out.println("状态:"+status);
+        log.info("状态:"+status);
 
     }
 

@@ -11,7 +11,7 @@ public class JasyptEncryptorUtilsTest {
 
     @Test
     void testEncode(){
-        JasyptEncryptorUtils.encode("root");
+        JasyptEncryptorUtils.encode("jdbc:mysql://119.23.189.235:3306/mybatis?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai");
     }
 
     @Test

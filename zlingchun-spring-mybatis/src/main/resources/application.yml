@@ -1,69 +1,69 @@
 server:
   port: 8082
 
-### \u914D\u7F6E\u6570\u636E\u6E90 \uFF08Druid\uFF09###
+### 配置数据源 （Druid）###
 spring:
   datasource:
-    ### JDBC \u57FA\u672C\u914D\u7F6E ###
-    driver-class-name: com.mysql.jdbc.Driver   # mysql8 \u7684\u8FDE\u63A5\u9A71\u52A8
+    ### JDBC 基本配置 ###
+    driver-class-name: com.mysql.jdbc.Driver   # mysql8 的连接驱动
     username: ${DATASOURCE_USERNAME:ENC(57zWlw6qZm8ymEY15CmarA==)}
     password: ${DATASOURCE_PWD:ENC(VdBOMBxwJoWOA8FC7oNOzy3HZeU2/kqk)}
-    url: ${DATASOURCE_URL:ENC(H7kWSc7RXUbutQyhdiAAv9ljOU8cPOZGMWn8YJjNGGoTxCS4PGehGOybafXfACHuzVeyczwhB4/mRVKEO8iVvVy4taEKgfLvCDexcA1voCUbZk2vzDKBTNUztRnvkBYQ3058YTUVkxiqyWtHS3S5uKXcqYvAoQjOMfHv/6QIfis=)}
-    type: com.alibaba.druid.pool.DruidDataSource  # \u6307\u5B9A\u6570\u636E\u6E90\u7C7B\u578B
-    ### \u8FDE\u63A5\u6C60 \u914D\u7F6E ###
+    url: ${DATASOURCE_URL:ENC(ed2Z+S2VVPg6mdXUbcWVLTpOR8MV/sD8APIxdxR8yjF+fhdB7FquGyqNn77MBLZNf3aeC/gR1EDj4y/WQJhAPjaIH4+9yTbOSCXv4XbBqYrDwM35FVgncLLDJyPpERlAsoeaCKnnqpi45OabcAhwWW2Yy1js3hwwhcBokpRxWwJokHu0sds+dw==)}
+    type: com.alibaba.druid.pool.DruidDataSource  # 指定数据源类型
+    ### 连接池 配置 ###
     druid:
-      # \u914D\u7F6E\u521D\u59CB\u5316\u5927\u5C0F\u3001\u6700\u5C0F\u3001\u6700\u5927\u7EBF\u7A0B\u6570
+      # 配置初始化大小、最小、最大线程数
       initial-size: 5
       minIdle: 10
-      # CPU\u6838\u6570+1\uFF0C\u4E5F\u53EF\u4EE5\u5927\u4E9B\u4F46\u4E0D\u8981\u8D85\u8FC720\uFF0C\u6570\u636E\u5E93\u52A0\u9501\u65F6\u8FDE\u63A5\u8FC7\u591A\u6027\u80FD\u4E0B\u964D
+      # CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
       max-active: 20
-      # \u914D\u7F6E\u83B7\u53D6\u8FDE\u63A5\u7B49\u5F85\u8D85\u65F6\u7684\u65F6\u95F4(\u5355\u4F4D\uFF1A\u6BEB\u79D2)
+      # 配置获取连接等待超时的时间(单位：毫秒)
       max-wait: 60000
-      # \u914D\u7F6E\u95F4\u9694\u591A\u4E45\u624D\u8FDB\u884C\u4E00\u6B21\u68C0\u6D4B\uFF0C\u68C0\u6D4B\u9700\u8981\u5173\u95ED\u7684\u7A7A\u95F2\u8FDE\u63A5\uFF0C\u5355\u4F4D\u662F\u6BEB\u79D2
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
       time-between-eviction-runs-millis: 2000
-      # \u914D\u7F6E\u4E00\u4E2A\u8FDE\u63A5\u5728\u6C60\u4E2D\u6700\u5C0F/\u6700\u5927\u751F\u5B58\u7684\u65F6\u95F4\uFF0C\u5355\u4F4D\u662F\u6BEB\u79D2
+      # 配置一个连接在池中最小/最大生存的时间，单位是毫秒
       min-evictable-idle-time-millis: 600000
       max-evictable-idle-time-millis: 900000
-      # \u7528\u6765\u6D4B\u8BD5\u8FDE\u63A5\u662F\u5426\u53EF\u7528\u7684SQL\u8BED\u53E5,\u9ED8\u8BA4\u503C\u6BCF\u79CD\u6570\u636E\u5E93\u90FD\u4E0D\u76F8\u540C,\u8FD9\u662Fmysql
+      # 用来测试连接是否可用的SQL语句,默认值每种数据库都不相同,这是mysql
       validationQuery: select 1
-      # \u5E94\u7528\u5411\u8FDE\u63A5\u6C60\u7533\u8BF7\u8FDE\u63A5\uFF0C\u5E76\u4E14testOnBorrow\u4E3Afalse\u65F6\uFF0C\u8FDE\u63A5\u6C60\u5C06\u4F1A\u5224\u65AD\u8FDE\u63A5\u662F\u5426\u5904\u4E8E\u7A7A\u95F2\u72B6\u6001\uFF0C\u5982\u679C\u662F\uFF0C\u5219\u9A8C\u8BC1\u8FD9\u6761\u8FDE\u63A5\u662F\u5426\u53EF\u7528
+      # 应用向连接池申请连接，并且testOnBorrow为false时，连接池将会判断连接是否处于空闲状态，如果是，则验证这条连接是否可用
       testWhileIdle: true
-      # \u5982\u679C\u4E3Atrue\uFF0C\u9ED8\u8BA4\u662Ffalse\uFF0C\u5E94\u7528\u5411\u8FDE\u63A5\u6C60\u7533\u8BF7\u8FDE\u63A5\u65F6\uFF0C\u8FDE\u63A5\u6C60\u4F1A\u5224\u65AD\u8FD9\u6761\u8FDE\u63A5\u662F\u5426\u662F\u53EF\u7528\u7684
+      # 如果为true，默认是false，应用向连接池申请连接时，连接池会判断这条连接是否是可用的
       testOnBorrow: false
-      # \u5982\u679C\u4E3Atrue\uFF08\u9ED8\u8BA4false\uFF09\uFF0C\u5F53\u5E94\u7528\u4F7F\u7528\u5B8C\u8FDE\u63A5\uFF0C\u8FDE\u63A5\u6C60\u56DE\u6536\u8FDE\u63A5\u7684\u65F6\u5019\u4F1A\u5224\u65AD\u8BE5\u8FDE\u63A5\u662F\u5426\u8FD8\u53EF\u7528
+      # 如果为true（默认false），当应用使用完连接，连接池回收连接的时候会判断该连接是否还可用
       testOnReturn: false
-      # \u662F\u5426\u7F13\u5B58preparedStatement\uFF0C\u4E5F\u5C31\u662FPSCache\u3002PSCache\u5BF9\u652F\u6301\u6E38\u6807\u7684\u6570\u636E\u5E93\u6027\u80FD\u63D0\u5347\u5DE8\u5927\uFF0C\u6BD4\u5982\u8BF4oracle
+      # 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle
       poolPreparedStatements: true
-      # \u8981\u542F\u7528PSCache\uFF0C\u5FC5\u987B\u914D\u7F6E\u5927\u4E8E0\uFF0C\u5F53\u5927\u4E8E0\u65F6\uFF0C poolPreparedStatements\u81EA\u52A8\u89E6\u53D1\u4FEE\u6539\u4E3Atrue\uFF0C
-      # \u5728Druid\u4E2D\uFF0C\u4E0D\u4F1A\u5B58\u5728Oracle\u4E0BPSCache\u5360\u7528\u5185\u5B58\u8FC7\u591A\u7684\u95EE\u9898\uFF0C
-      # \u53EF\u4EE5\u628A\u8FD9\u4E2A\u6570\u503C\u914D\u7F6E\u5927\u4E00\u4E9B\uFF0C\u6BD4\u5982\u8BF4100
+      # 要启用PSCache，必须配置大于0，当大于0时， poolPreparedStatements自动触发修改为true，
+      # 在Druid中，不会存在Oracle下PSCache占用内存过多的问题，
+      # 可以把这个数值配置大一些，比如说100
       maxOpenPreparedStatements: 20
-      # \u8FDE\u63A5\u6C60\u4E2D\u7684minIdle\u6570\u91CF\u4EE5\u5185\u7684\u8FDE\u63A5\uFF0C\u7A7A\u95F2\u65F6\u95F4\u8D85\u8FC7minEvictableIdleTimeMillis\uFF0C\u5219\u4F1A\u6267\u884CkeepAlive\u64CD\u4F5C
+      # 连接池中的minIdle数量以内的连接，空闲时间超过minEvictableIdleTimeMillis，则会执行keepAlive操作
       keepAlive: true
       maxPoolPreparedStatementPerConnectionSize: 20
       useGlobalDataSourceStat: true
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      # Spring \u76D1\u63A7\uFF0C\u5229\u7528aop \u5BF9\u6307\u5B9A\u63A5\u53E3\u7684\u6267\u884C\u65F6\u95F4\uFF0Cjdbc\u6570\u8FDB\u884C\u8BB0\u5F55
+      # Spring 监控，利用aop 对指定接口的执行时间，jdbc数进行记录
       aop-patterns: "com.springboot.template.dao.*"
-      ### \u542F\u7528\u5185\u7F6E\u8FC7\u6EE4\u5668\uFF08\u7B2C\u4E00\u4E2A stat\u5FC5\u987B\uFF0C\u5426\u5219\u76D1\u63A7\u4E0D\u5230SQL\uFF09###
+      ### 启用内置过滤器（第一个 stat必须，否则监控不到SQL）###
       filters: stat,wall,log4j2
-      # \u81EA\u5DF1\u914D\u7F6E\u76D1\u63A7\u7EDF\u8BA1\u62E6\u622A\u7684filter
+      # 自己配置监控统计拦截的filter
       filter:
-        # \u5F00\u542Fdruiddatasource\u7684\u72B6\u6001\u76D1\u63A7
+        # 开启druiddatasource的状态监控
         stat:
           enabled: true
           db-type: mysql
-          # \u5F00\u542F\u6162sql\u76D1\u63A7\uFF0C\u8D85\u8FC72s \u5C31\u8BA4\u4E3A\u662F\u6162sql\uFF0C\u8BB0\u5F55\u5230\u65E5\u5FD7\u4E2D
+          # 开启慢sql监控，超过2s 就认为是慢sql，记录到日志中
           log-slow-sql: true
           slow-sql-millis: 2000
-        # \u5F00\u542Fdruid \u9632\u706B\u5899\u76D1\u63A7
+        # 开启druid 防火墙监控
         wall:
           enabled: true
           db-type: mysql
           config:
             delete-allow: false
             drop-table-allow: false
-        # \u65E5\u5FD7\u76D1\u63A7\uFF0C\u4F7F\u7528slf4j \u8FDB\u884C\u65E5\u5FD7\u8F93\u51FA
+        # 日志监控，使用slf4j 进行日志输出
         slf4j:
           enabled: true
           statement-log-error-enabled: true
@@ -71,22 +71,22 @@ spring:
           statement-close-after-log-enabled: false
           result-set-open-after-log-enabled: false
           result-set-close-after-log-enabled: false
-      ### \u914D\u7F6EWebStatFilter\uFF0C\u7528\u4E8E\u91C7\u96C6web\u5173\u8054\u76D1\u63A7\u7684\u6570\u636E ###
+      ### 配置WebStatFilter，用于采集web关联监控的数据 ###
       web-stat-filter:
-        enabled: true                   # \u542F\u52A8 StatFilter
-        url-pattern: /*                 # \u8FC7\u6EE4\u6240\u6709url
-        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # \u6392\u9664\u4E00\u4E9B\u4E0D\u5FC5\u8981\u7684url
-        session-stat-enable: true       # \u5F00\u542Fsession\u7EDF\u8BA1\u529F\u80FD
-        session-stat-max-count: 1000    # session\u7684\u6700\u5927\u4E2A\u6570,\u9ED8\u8BA4100
-      ### \u914D\u7F6EStatViewServlet\uFF08\u76D1\u63A7\u9875\u9762\uFF09\uFF0C\u7528\u4E8E\u5C55\u793ADruid\u7684\u7EDF\u8BA1\u4FE1\u606F ###
+        enabled: true                   # 启动 StatFilter
+        url-pattern: /*                 # 过滤所有url
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除一些不必要的url
+        session-stat-enable: true       # 开启session统计功能
+        session-stat-max-count: 1000    # session的最大个数,默认100
+      ### 配置StatViewServlet（监控页面），用于展示Druid的统计信息 ###
       stat-view-servlet:
-        enabled: true         # \u542F\u7528StatViewServlet
-        url-pattern: /druid/* # \u8BBF\u95EE\u5185\u7F6E\u76D1\u63A7\u9875\u9762\u7684\u8DEF\u5F84\uFF0C\u5185\u7F6E\u76D1\u63A7\u9875\u9762\u7684\u9996\u9875\u662F/druid/index.html
-        reset-enable: false   # \u4E0D\u5141\u8BB8\u6E05\u7A7A\u7EDF\u8BA1\u6570\u636E,\u91CD\u65B0\u8BA1\u7B97
-        login-username: ENC(GAZ3vPa9FrMMA2BxbHZYyQ==)  # \u914D\u7F6E\u76D1\u63A7\u9875\u9762\u8BBF\u95EE\u5BC6\u7801
+        enabled: true         # 启用StatViewServlet
+        url-pattern: /druid/* # 访问内置监控页面的路径，内置监控页面的首页是/druid/index.html
+        reset-enable: false   # 不允许清空统计数据,重新计算
+        login-username: ENC(GAZ3vPa9FrMMA2BxbHZYyQ==)  # 配置监控页面访问密码
         login-password: ENC(Nj94S/baROPtHRTJkTJ+dg==)
-        allow: 127.0.0.1  # \u5141\u8BB8\u8BBF\u95EE\u7684\u5730\u5740\uFF0C\u5982\u679Callow\u6CA1\u6709\u914D\u7F6E\u6216\u8005\u4E3A\u7A7A\uFF0C\u5219\u5141\u8BB8\u6240\u6709\u8BBF\u95EE
-        deny:       # \u62D2\u7EDD\u8BBF\u95EE\u7684\u5730\u5740\uFF0Cdeny\u4F18\u5148\u4E8Eallow\uFF0C\u5982\u679C\u5728deny\u5217\u8868\u4E2D\uFF0C\u5C31\u7B97\u5728allow\u5217\u8868\u4E2D\uFF0C\u4E5F\u4F1A\u88AB\u62D2\u7EDD
+        allow: 127.0.0.1  # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
+        deny:       # 拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
   sql:
     init:
       schemaLocations:
@@ -110,3 +110,12 @@ jasypt:
     password: lybgeek
     algorithm: PBEWithMD5AndDES
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
+mybatis:
+  # sql隐射文件位置
+  mapper-locations: classpath:mapper/*.xml
+  # 别名设置
+  typeAliasesPackage: com.zlingchun.mybatis.**.po
+  configuration:
+    # 开启自动驼峰命名规则（camel case）映射
+    map-underscore-to-camel-case: true
+#  config-location: classpath:mybatis-config.xml

@@ -2,6 +2,8 @@ server:
   port: 8082
 ### 配置数据源 （Druid）###
 spring:
+  main:
+      allow-circular-references: true
   profiles:
     active: dev
   datasource:
@@ -120,6 +122,14 @@ mybatis:
     # 开启自动驼峰命名规则（camel case）映射
     map-underscore-to-camel-case: true
 #  config-location: classpath:mybatis-config.xml
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  pageSizeZero: true
+  params: count=countSql
+
 custom:
   snowflake:
     machine-id: 1

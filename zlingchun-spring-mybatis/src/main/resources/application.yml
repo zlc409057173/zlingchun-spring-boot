@@ -1,14 +1,15 @@
 server:
   port: 8082
-
 ### 配置数据源 （Druid）###
 spring:
+  profiles:
+    active: dev
   datasource:
     ### JDBC 基本配置 ###
-    driver-class-name: com.mysql.jdbc.Driver   # mysql8 的连接驱动
-    username: ${DATASOURCE_USERNAME:ENC(57zWlw6qZm8ymEY15CmarA==)}
-    password: ${DATASOURCE_PWD:ENC(VdBOMBxwJoWOA8FC7oNOzy3HZeU2/kqk)}
-    url: ${DATASOURCE_URL:ENC(ed2Z+S2VVPg6mdXUbcWVLTpOR8MV/sD8APIxdxR8yjF+fhdB7FquGyqNn77MBLZNf3aeC/gR1EDj4y/WQJhAPjaIH4+9yTbOSCXv4XbBqYrDwM35FVgncLLDJyPpERlAsoeaCKnnqpi45OabcAhwWW2Yy1js3hwwhcBokpRxWwJokHu0sds+dw==)}
+    driver-class-name: com.mysql.cj.jdbc.Driver  # mysql8 的连接驱动
+    username: ${DATASOURCE_USERNAME:ENC(tK1Drgp7ST7OWeN6FLDZ0A==)}
+    password: ${DATASOURCE_PWD:ENC(GL7C0BdaB5+18XfZfF2fHw==)}
+    url: ${DATASOURCE_URL:ENC(oBs8A2mIYvPkQBF+c8OOqi3x822k724VVogFg017oD/qJ2vBVkHPeLpeyRx4QsRfB9XiEUqZJRsP83zhQZcm4ssVG18Jac439zALD/cHYr8PxfiDKt78pB7qtiaTsmZpDCUulwqRoSTR+Fe29YuHDuWlOCzMeKhOSlOeSSaAqRQ=)}
     type: com.alibaba.druid.pool.DruidDataSource  # 指定数据源类型
     ### 连接池 配置 ###
     druid:
@@ -58,7 +59,7 @@ spring:
           slow-sql-millis: 2000
         # 开启druid 防火墙监控
         wall:
-          enabled: true
+          enabled: false
           db-type: mysql
           config:
             delete-allow: false
@@ -112,10 +113,18 @@ jasypt:
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
 mybatis:
   # sql隐射文件位置
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:com/zlingchun/mybatis/mapper/*.xml
   # 别名设置
   typeAliasesPackage: com.zlingchun.mybatis.**.po
   configuration:
     # 开启自动驼峰命名规则（camel case）映射
     map-underscore-to-camel-case: true
 #  config-location: classpath:mybatis-config.xml
+custom:
+  snowflake:
+    machine-id: 1
+    data-center-id: 1
+logging:
+  level:
+#    org.mybatis: debug
+    com.zlingchun.mybatis.mapper: debug

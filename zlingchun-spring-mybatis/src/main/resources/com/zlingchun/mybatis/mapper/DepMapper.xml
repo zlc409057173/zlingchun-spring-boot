@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlingchun.mybatis.mapper.DepMapper">
+    <resultMap id="BaseResultMap" type="com.zlingchun.mybatis.entity.po.Dep">
+        <id column="did" jdbcType="INTEGER" property="did"/>
+        <result column="dep_name" jdbcType="VARCHAR" property="depName"/>
+    </resultMap>
+
+    <resultMap id="CollectionResultMap" type="com.zlingchun.mybatis.entity.po.Dep">
+        <id column="did" jdbcType="INTEGER" property="did"/>
+        <result column="dep_name" jdbcType="VARCHAR" property="depName"/>
+        <collection property="emps" ofType="com.zlingchun.mybatis.entity.po.Emp" select="com.zlingchun.mybatis.mapper.EmpMapper.selectForeignkey" column="did" fetchType="lazy">
+            <id column="eid" jdbcType="BIGINT" property="eid"/>
+            <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+            <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
+            <result column="sex" jdbcType="CHAR" property="sex"/>
+            <result column="birthday" jdbcType="DATE" property="birthday"/>
+            <result column="emp_address" jdbcType="VARCHAR" property="empAddress"/>
+            <result column="salary" jdbcType="DECIMAL" property="salary"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    did, dep_name
+    </sql>
+    <!--  int insertSelective(Dep record);-->
+    <insert id="insertSelective" parameterType="com.zlingchun.mybatis.entity.po.Dep" useGeneratedKeys="true"
+            keyProperty="did">
+        insert into t_dep
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            did,
+            <if test="depName != null">
+                dep_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{did,jdbcType=INTEGER},
+            <if test="depName != null">
+                #{depName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--  List<Dep> selectSelective(Dep record);-->
+    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.po.Dep"
+            resultType="com.zlingchun.mybatis.entity.po.Dep">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dep
+        <where>
+            <if test="depName != null">
+                #{depName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <!--  Dep selectPrimarykey(@Param("did") Integer did);-->
+    <select id="selectPrimarykey" parameterType="int" resultType="com.zlingchun.mybatis.entity.po.Dep">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dep
+        where did = #{did, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectEmps" parameterType="int" resultMap="CollectionResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dep
+        where did = #{did, jdbcType=INTEGER}
+    </select>
+</mapper>

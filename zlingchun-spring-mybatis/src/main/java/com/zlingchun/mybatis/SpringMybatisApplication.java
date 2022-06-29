@@ -1,11 +1,12 @@
 package com.zlingchun.mybatis;
 
-import com.cxytiandi.encrypt.springboot.annotation.EnableEncrypt;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@EnableEncrypt
+//@EnableEncrypt
 @SpringBootApplication
+@MapperScan(basePackages = "com.zlingchun.mybatis.mapper")
 public class SpringMybatisApplication {
 
     public static void main(String[] args) {

@@ -1,11 +1,10 @@
 package com.zlingchun.mybatis.utils.converter;
 
 import com.alibaba.excel.converters.Converter;
-import com.alibaba.excel.metadata.GlobalConfiguration;
+import com.alibaba.excel.converters.ReadConverterContext;
+import com.alibaba.excel.converters.WriteConverterContext;
+import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.data.WriteCellData;
-import com.alibaba.excel.metadata.property.ExcelContentProperty;
-
-import java.io.IOException;
 
 /**
  * @author achun
@@ -13,14 +12,31 @@ import java.io.IOException;
  * @description descrip
  */
 public class CustomStringConverter implements Converter<String> {
-    public CustomStringConverter() {
-    }
-
+    @Override
     public Class<?> supportJavaTypeKey() {
         return String.class;
     }
-
-    public WriteCellData<?> convertToExcelData(String value, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) throws IOException {
-        return new WriteCellData("自定义："+value);
+    @Override
+    public CellDataTypeEnum supportExcelTypeKey() {
+        return CellDataTypeEnum.STRING;
+    }
+    /**
+     * 这里读的时候会调用
+     *
+     * @param context
+     * @return
+     */
+    @Override
+    public String convertToJavaData(ReadConverterContext<?> context) {
+        return "自定义：" + context.getReadCellData().getStringValue();
+    }
+    /**
+     * 这里是写的时候会调用 不用管
+     *
+     * @return
+     */
+    @Override
+    public WriteCellData<?> convertToExcelData(WriteConverterContext<String> context) {
+        return new WriteCellData<>("自定义：" + context.getValue());
     }
 }

@@ -1,14 +1,22 @@
 package com.zlingchun.mybatis.controller;
 
+import cn.hutool.core.lang.Snowflake;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.excel.util.MapUtils;
 import com.alibaba.fastjson2.JSON;
+import com.zlingchun.mybatis.entity.vo.esayExcel.read.po.ReaderData;
 import com.zlingchun.mybatis.entity.vo.esayExcel.writer.DownloadData;
+import com.zlingchun.mybatis.listener.ReaderDataListener;
+import com.zlingchun.mybatis.service.ReaderDataService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -24,7 +32,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("file")
 public class FileController {
-
+    @Resource
+    Snowflake snowflake;
+    @Resource
+    ReaderDataService dataService;
     /**
      * 文件下载（失败了会返回一个有部分数据的Excel）
      * <p>
@@ -73,6 +84,19 @@ public class FileController {
             map.put("message", "下载文件失败" + e.getMessage());
             response.getWriter().println(JSON.toJSONString(map));
         }
+    }
+
+    /**
+     * 文件上传
+     * 1. 创建excel对应的实体对象 参照{@link ReaderData}
+     * 2. 由于默认一行行的读取excel，所以需要创建excel一行一行的回调监听器，参照{@link ReaderDataListener}
+     * 3. 直接读即可
+     */
+    @PostMapping("upload")
+    @ResponseBody
+    public String upload(MultipartFile file) throws IOException {
+        EasyExcel.read(file.getInputStream(), ReaderData.class, new ReaderDataListener(snowflake, dataService)).sheet().doRead();
+        return "success";
     }
 
     //此处我们可以从数据库查询数据，也可以根据业务需求组装需要的数据

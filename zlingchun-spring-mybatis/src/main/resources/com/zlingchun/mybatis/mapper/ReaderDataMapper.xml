@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlingchun.mybatis.mapper.ReaderDataMapper">
+    <sql id="Base_Column_Sql">
+        id, title, pro_date, price
+    </sql>
+    <insert id="insert" parameterType="com.zlingchun.mybatis.entity.vo.esayExcel.read.po.ReaderData">
+        insert into t_readerdata
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null and title != ''">
+                title,
+            </if>
+            <if test="proDate != null">
+                pro_date,
+            </if>
+            <if test="price != null">
+                price
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id, jdbcType=BIGINT},
+            </if>
+            <if test="title != null and title != ''">
+                #{title, jdbcType=VARCHAR},
+            </if>
+            <if test="proDate != null">
+                #{proDate, jdbcType=DATE},
+            </if>
+            <if test="price != null">
+                #{price, jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <insert id="batchInsert" parameterType="list">
+        insert into t_readerdata (<include refid="Base_Column_Sql"/>)
+        values
+        <foreach collection="records" item="record" separator="," index="index">
+            (#{record.id, jdbcType=BIGINT}, #{record.title, jdbcType=VARCHAR}, #{record.proDate, jdbcType=DATE}, #{record.price, jdbcType=DECIMAL})
+        </foreach>
+    </insert>
+
+</mapper>

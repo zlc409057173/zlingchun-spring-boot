@@ -4,7 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.excel.util.MapUtils;
 import com.alibaba.fastjson2.JSON;
-import com.zlingchun.mybatis.entity.vo.esayExcel.DownloadData;
+import com.zlingchun.mybatis.entity.vo.esayExcel.writer.DownloadData;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -11,5 +11,9 @@ import java.util.List;
  */
 public interface EmpService {
 
-    List<Emp> findEmps(String empName);
+    List<Emp> findEmps(Emp emp);
+
+    List<Emp> findEmps(Emp emp, Integer pageNum, Integer pageSize);
+
+    int batchSave(List<Emp> emps);
 }

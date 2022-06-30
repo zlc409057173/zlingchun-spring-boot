@@ -28,13 +28,11 @@
             keyProperty="did">
         insert into t_dep
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            did,
             <if test="depName != null">
                 dep_name,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            #{did,jdbcType=INTEGER},
             <if test="depName != null">
                 #{depName,jdbcType=VARCHAR},
             </if>
@@ -48,7 +46,7 @@
         from t_dep
         <where>
             <if test="depName != null">
-                #{depName,jdbcType=VARCHAR}
+                dep_name = #{depName,jdbcType=VARCHAR}
             </if>
         </where>
     </select>

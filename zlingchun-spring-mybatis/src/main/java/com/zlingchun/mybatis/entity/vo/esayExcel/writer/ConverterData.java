@@ -3,7 +3,7 @@ package com.zlingchun.mybatis.entity.vo.esayExcel.writer;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
 import com.alibaba.excel.annotation.format.NumberFormat;
-import com.zlingchun.mybatis.utils.converter.CustomStringConverter;
+import com.zlingchun.mybatis.converter.CustomStringConverter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,58 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zlingchun.mybatis.mapper.EmpMapper">
-    <resultMap id="CascadeResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
-        <id column="eid" jdbcType="BIGINT" property="eid"/>
-        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
-        <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
-        <result column="sex" jdbcType="CHAR" property="sex"/>
-        <result column="birthday" jdbcType="DATE" property="birthday"/>
-        <result column="emp_address" jdbcType="VARCHAR" property="empAddress"/>
-        <result column="salary" jdbcType="DECIMAL" property="salary"/>
-        <result column="did" jdbcType="INTEGER" property="dep.did"/>
-        <result column="dep_name" jdbcType="DECIMAL" property="dep.depName"/>
-    </resultMap>
+<!--    <resultMap id="CascadeResultMap" type="com.zlingchun.mybatis.entity.po.Emp">-->
+<!--        <id column="eid" jdbcType="BIGINT" property="eid"/>-->
+<!--        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>-->
+<!--        <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>-->
+<!--        <result column="sex" jdbcType="CHAR" property="sex"/>-->
+<!--        <result column="birthday" jdbcType="DATE" property="birthday"/>-->
+<!--        <result column="emp_address" jdbcType="VARCHAR" property="empAddress"/>-->
+<!--        <result column="salary" jdbcType="DECIMAL" property="salary"/>-->
+<!--        <result column="did" jdbcType="INTEGER" property="dep.did"/>-->
+<!--        <result column="dep_name" jdbcType="DECIMAL" property="dep.depName"/>-->
+<!--    </resultMap>-->
+
     <resultMap id="AssociationResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
         <id column="eid" jdbcType="BIGINT" property="eid"/>
         <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
         <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
+        <result column="tel_number" jdbcType="VARCHAR" property="telNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="sex" jdbcType="CHAR" property="sex"/>
         <result column="birthday" jdbcType="DATE" property="birthday"/>
         <result column="emp_address" jdbcType="VARCHAR" property="empAddress"/>
         <result column="salary" jdbcType="DECIMAL" property="salary"/>
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
         <association property="dep" javaType="com.zlingchun.mybatis.entity.po.Dep">
             <id column="did" jdbcType="INTEGER" property="did"/>
             <result column="dep_name" jdbcType="DECIMAL" property="depName"/>
+            <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+            <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+            <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
+            <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
         </association>
     </resultMap>
+
     <resultMap id="SelectResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
         <id column="eid" jdbcType="BIGINT" property="eid"/>
         <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
         <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
+        <result column="tel_number" jdbcType="VARCHAR" property="telNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="sex" jdbcType="CHAR" property="sex"/>
         <result column="birthday" jdbcType="DATE" property="birthday"/>
         <result column="emp_address" jdbcType="VARCHAR" property="empAddress"/>
         <result column="salary" jdbcType="DECIMAL" property="salary"/>
-        <association property="dep" javaType="com.zlingchun.mybatis.entity.po.Dep" select="com.zlingchun.mybatis.mapper.DepMapper.selectPrimarykey" column="did">
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <association property="dep" javaType="com.zlingchun.mybatis.entity.po.Dep" select="com.zlingchun.mybatis.mapper.DepMapper.selectPrimarykey" column="did" fetchType="lazy">
             <id column="did" jdbcType="INTEGER" property="did"/>
             <result column="dep_name" jdbcType="DECIMAL" property="depName"/>
+            <result column="createByDep" jdbcType="VARCHAR" property="createBy"/>
+            <result column="createTimeDep" jdbcType="TIMESTAMP" property="createTime"/>
+            <result column="updateByDep" jdbcType="VARCHAR" property="updateBy"/>
+            <result column="updateTimeDep" jdbcType="TIMESTAMP" property="updateTime"/>
         </association>
     </resultMap>
-    <resultMap id="NativeResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
+
+    <resultMap id="BaseResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
         <id column="eid" jdbcType="BIGINT" property="eid"/>
         <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
         <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
+        <result column="tel_number" jdbcType="VARCHAR" property="telNumber"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="sex" jdbcType="CHAR" property="sex"/>
         <result column="birthday" jdbcType="DATE" property="birthday"/>
         <result column="emp_address" jdbcType="VARCHAR" property="empAddress"/>
         <result column="salary" jdbcType="DECIMAL" property="salary"/>
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
+
     <sql id="Base_Column_List">
-    eid, emp_name, emp_num, sex, birthday, emp_address, salary, did
+    emp.eid, emp.emp_name, emp.emp_num, emp.tel_number, emp.email, emp.sex, emp.birthday, emp.emp_address, emp.salary, emp.createBy, emp.createTime, emp.updateBy, emp.updateTime, emp.did
     </sql>
-    <sql id="Emp_Dep_List">
-    eid, emp_name, emp_num, sex, birthday, emp_address, salary, dep.did, dep.dep_name
+
+    <sql id="EMP_DEP_Column_List">
+    emp.eid, emp.emp_name, emp.emp_num, emp.tel_number, emp.email, emp.sex, emp.birthday, emp.emp_address, emp.salary, emp.createBy, emp.createTime, emp.updateBy, emp.updateTime,
+    dep.did, dep.dep_name, dep.createBy createByDep, dep.createTime createTimeDep, dep.updateBy updateByDep, dep.updateTime updateTimeDep
     </sql>
+
+    <!--  int insertSelective(Emp record);  -->
     <insert id="insertSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp">
         insert into t_emp
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -65,23 +99,39 @@
             <if test="empNum != null and empNum != ''">
                 emp_num,
             </if>
+            <if test="telNumber != null and telNumber != ''">
+                tel_number,
+            </if>
+            <if test="email != null and email != ''">
+                email,
+            </if>
             <if test="sex != null">
                 sex,
             </if>
             <if test="birthday != null">
                 birthday,
             </if>
-            <if test="empAddress != null">
+            <if test="empAddress != null and empAddress != ''">
                 emp_address,
             </if>
             <if test="salary != null">
                 salary,
             </if>
             <if test="dep != null and dep.did !=null">
-                did
+                did,
+            </if>
+            <if test="createBy != null and createBy != ''">
+                createBy,
+            </if>
+            createTime,
+            <if test="updateBy != null and updateBy != ''">
+                updateBy,
+            </if>
+            <if test="updateTime != null">
+                updateTime,
             </if>
         </trim>
-        value
+        values
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="eid != null">
                 #{eid, jdbcType=BIGINT},
@@ -91,6 +141,12 @@
             </if>
             <if test="empNum != null and empNum != ''">
                 #{empNum, jdbcType=VARCHAR},
+            </if>
+            <if test="telNumber != null and telNumber != ''">
+                #{telNumber, jdbcType=VARCHAR},
+            </if>
+            <if test="email != null and email != ''">
+                #{email, jdbcType=VARCHAR},
             </if>
             <if test="sex != null">
                 #{sex, jdbcType=CHAR},
@@ -105,71 +161,49 @@
                 #{salary, jdbcType=DECIMAL},
             </if>
             <if test="dep != null and dep.did !=null">
-                #{dep.did, jdbcType=INTEGER}
+                #{dep.did, jdbcType=INTEGER},
             </if>
+            <if test="createBy != null and createBy != ''">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            now(),
+            <if test="updateBy != null and updateBy != ''">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="salary != null">
+                salary = #{salary, jdbcType=DECIMAL},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                updateBy = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            updateTime = now()
         </trim>
     </insert>
 
-    <insert id="batchInsert" parameterType="java.util.List">
-        insert into t_emp (<include refid="Base_Column_List"/>) values
-        <foreach collection="list" item="emp" index="index" separator=",">
-            (#{emp.eid, jdbcType=BIGINT}, #{emp.empName, jdbcType=VARCHAR}, #{emp.empNum, jdbcType=VARCHAR},#{emp.sex, jdbcType=CHAR}, #{emp.birthday, jdbcType=DATE},
-             #{emp.empAddress, jdbcType=VARCHAR}, #{emp.salary, jdbcType=DECIMAL}, #{emp.dep.did, jdbcType=INTEGER})
+    <!--  int insertBatch(@Param("emps") List<Emp> emps);  -->
+    <!--存在即可修改下述字段的数据，注意values()中的内容是数据表中相应的字段名-->
+    <insert id="insertBatch" parameterType="list">
+        insert into t_emp (eid, emp_name, emp_num, tel_number, email, sex, birthday, emp_address, salary, createBy, createTime, updateBy, updateTime, did) values
+        <foreach collection="emps" item="emp" index="index" separator=",">
+            (#{emp.eid, jdbcType=BIGINT}, #{emp.empName, jdbcType=VARCHAR}, #{emp.empNum, jdbcType=VARCHAR}, #{emp.telNumber, jdbcType=VARCHAR}, #{emp.email, jdbcType=VARCHAR},
+            #{emp.sex, jdbcType=CHAR}, #{emp.birthday, jdbcType=DATE}, #{emp.empAddress, jdbcType=VARCHAR}, #{emp.salary, jdbcType=DECIMAL}, #{emp.createBy,jdbcType=VARCHAR},
+            now(), #{emp.updateBy,jdbcType=VARCHAR}, now(), #{emp.dep.did, jdbcType=INTEGER})
         </foreach>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            salary = values(salary),
+            updateBy = values(updateBy),
+            updateTime = now()
+        </trim>
     </insert>
 
-    <delete id="deleteSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp">
-        delete from t_emp emp
-        <where>
-            <if test="eid != null">
-                and emp.eid = #{eid, jdbcType=BIGINT}
-            </if>
-            <if test="empName != null and empName != ''">
-                and emp.emp_name like concat('%', #{empName, jdbcType=VARCHAR}, '%')
-            </if>
-            <if test="empNum != null and empNum != ''">
-                and emp.emp_num = #{empNum, jdbcType=VARCHAR}
-            </if>
-            <if test="sex != null">
-                and emp.sex = #{sex, jdbcType=CHAR}
-            </if>
-            <if test="birthday != null">
-                and emp.birthday = #{birthday, jdbcType=DATE}
-            </if>
-            <if test="empAddress != null">
-                and emp.emp_address like concat('%', #{empAddress, jdbcType=VARCHAR}, '%')
-            </if>
-            <if test="salary != null">
-                and emp.salary &gt;= #{salary, jdbcType=DECIMAL}
-            </if>
-            <if test="dep != null and dep.did !=null">
-                and emp.did = #{dep.did, jdbcType=INTEGER}
-            </if>
-            <if test="dep != null and dep.depName !=null">
-                and emp.did = (select did from t_dep where dep_name like concat('%', #{dep.depName, jdbcType=VARCHAR}, '%') )
-            </if>
-        </where>
-    </delete>
-
-    <delete id="deletePrimarykey" parameterType="long">
-        delete from t_emp emp
-        <where>
-            emp.eid = #{id, jdbcType=BIGINT}
-        </where>
-    </delete>
-
-    <delete id="batchDelete" parameterType="list">
-        delete from t_emp emp
-        <where>
-            <if test="ids != null">
-                emp.eid in
-                <foreach collection="ids" item="id" open="(" close=")" separator="," index="index">
-                    #{id, jdbcType=BIGINT}
-                </foreach>
-            </if>
-        </where>
-    </delete>
-
+    <!--  int updateSelective(Emp record);  -->
     <update id="updateSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp">
         update t_emp emp
         <set>
@@ -178,6 +212,12 @@
             </if>
             <if test="empNum != null and empNum != ''">
                 emp.emp_num = #{empNum, jdbcType=VARCHAR},
+            </if>
+            <if test="telNumber != null">
+                emp.tel_number = #{telNumber, jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                emp.email = #{email, jdbcType=VARCHAR},
             </if>
             <if test="sex != null">
                 emp.sex = #{sex, jdbcType=CHAR},
@@ -194,26 +234,173 @@
             <if test="dep != null and dep.did !=null">
                 emp.did = #{dep.did, jdbcType=INTEGER},
             </if>
+            <if test="updateBy != null and updateBy != ''">
+                emp.updateBy = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            emp.updateTime = now()
         </set>
         <where>
-            emp.eid = #{eid, jdbcType=BIGINT}
+            <choose>
+                <when test="eid != null">
+                    emp.eid = #{eid, jdbcType=BIGINT}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
         </where>
     </update>
 
-<!--    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="CascadeResultMap">-->
-    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="AssociationResultMap">
-        select <include refid="Emp_Dep_List"/>
-        from t_emp emp left join t_dep dep on emp.did = dep.did
+    <!-- int deleteSelective(Emp record); -->
+    <delete id="deleteSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp">
+        delete from t_emp emp
+        <where>
+            <choose>
+                <when test="eid != null">
+                    emp.eid = #{eid, jdbcType=BIGINT}
+                </when>
+                <when test="empName == null and empNum == null and telNumber == null and email == null and sex == null and empAddress == null and (salary == null or birthday == null) and createBy == null and createTime == null
+                and updateBy == null and updateTime == null and (dep == null or (emp.did == null and dep.depName ==null))">
+                    1=2
+                </when>
+                <otherwise>
+                    <if test="empName != null and empName != ''">
+                        and emp.emp_name like concat('%', #{empName,jdbcType=VARCHAR}, '%')
+                    </if>
+                    <if test="empNum != null and empNum != ''">
+                        and emp.emp_num = #{empNum, jdbcType=VARCHAR}
+                    </if>
+                    <if test="telNumber != null">
+                        and emp.tel_number = #{telNumber, jdbcType=VARCHAR}
+                    </if>
+                    <if test="email != null and empName != null and empName != ''">
+                        and emp.email = #{email, jdbcType=VARCHAR}
+                    </if>
+                    <if test="sex != null and empName != null and empName != ''">
+                        and emp.sex = #{sex, jdbcType=CHAR}
+                    </if>
+                    <if test="empAddress != null">
+                        and emp.emp_address like concat('%', #{empAddress, jdbcType=VARCHAR}, '%')
+                    </if>
+                    <if test="salary != null and birthday != null">
+                        and emp.birthday = #{birthday, jdbcType=DATE}
+                        and emp.salary &gt;= #{salary, jdbcType=DECIMAL}
+                    </if>
+                    <if test="createBy != null and createBy != ''">
+                        and emp.createBy = #{createBy,jdbcType=VARCHAR}
+                    </if>
+                    <if test="createTime != null">
+                        and emp.createTime = #{createTime,jdbcType=TIMESTAMP}
+                    </if>
+                    <if test="updateBy != null and updateBy != ''">
+                        and emp.updateBy = #{updateBy,jdbcType=VARCHAR}
+                    </if>
+                    <if test="updateTime != null">
+                        and emp.updateTime = #{updateTime,jdbcType=TIMESTAMP}
+                    </if>
+                    <if test="dep != null and dep.did !=null">
+                        and emp.did = #{dep.did, jdbcType=INTEGER}
+                    </if>
+                    <if test="dep != null and dep.depName !=null">
+                        and emp.did = (select did from t_dep where dep_name like concat('%', #{dep.depName, jdbcType=VARCHAR}, '%') )
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+    </delete>
+
+    <!--  int deleteBatch(@Param("ids") List<Long> ids);  -->
+    <delete id="deleteBatch" parameterType="list">
+        delete from t_emp emp
+        <where>
+            <choose>
+                <when test="ids != null and ids.size() &gt; 0">
+                    emp.eid in
+                    <foreach collection="ids" item="id" open="(" close=")" separator="," index="index">
+                        #{id, jdbcType=BIGINT}
+                    </foreach>
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </delete>
+
+    <!--  Emp selectPrimary(Emp record);  -->
+    <select id="selectPrimary" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_emp emp
+        <where>
+            <choose>
+                <when test="eid != null or (empNum != null and empNum != '') or telNumber != null">
+                    <if test="eid != null">
+                        emp.eid = #{eid, jdbcType=BIGINT}
+                    </if>
+                    <if test="empNum != null and empNum != ''">
+                        or emp.emp_num = #{empNum, jdbcType=VARCHAR}
+                    </if>
+                    <if test="telNumber != null">
+                        or emp.tel_number = #{telNumber, jdbcType=BIGINT}
+                    </if>
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!-- List<Emp> selectSelective(Emp record); -->
+    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="SelectResultMap">
+        select <include refid="Base_Column_List"/>
+        from t_emp emp
         <trim prefix="where" >
             1=1
-            <if test="eid != null">
-                and emp.eid = #{eid, jdbcType=BIGINT}
-            </if>
             <if test="empName != null and empName != ''">
                 and emp.emp_name like concat('%', #{empName, jdbcType=VARCHAR}, '%')
             </if>
             <if test="empNum != null and empNum != ''">
-                and emp.emp_num = #{empNum, jdbcType=VARCHAR}
+                and emp.emp_num like concat('%', #{empNum, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="telNumber != null">
+                and emp.tel_number like concat('%', #{telNumber, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="email != null and empName != null and empName != ''">
+                and emp.email like concat('%', #{email, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="sex != null">
+                and emp.sex = #{sex, jdbcType=CHAR}
+            </if>
+            <if test="birthday != null">
+                and emp.birthday = #{birthday, jdbcType=DATE}
+            </if>
+            <if test="empAddress != null">
+                and emp.emp_address like concat('%', #{empAddress, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="salary != null">
+                and emp.salary &gt;= #{salary, jdbcType=DECIMAL}
+            </if>
+        </trim>
+    </select>
+
+    <!-- List<Emp> selectSelectiveLinkDep(Emp record); -->
+    <select id="selectSelectiveJoinDep" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="AssociationResultMap">
+        select <include refid="EMP_DEP_Column_List"/>
+        from t_emp emp left join t_dep dep on emp.did = dep.did
+        <trim prefix="where" >
+            1=1
+            <if test="empName != null and empName != ''">
+                and emp.emp_name like concat('%', #{empName, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="empNum != null and empNum != ''">
+                and emp.emp_num like concat('%', #{empNum, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="telNumber != null">
+                and emp.tel_number like concat('%', #{telNumber, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="email != null and empName != null and empName != ''">
+                and emp.email like concat('%', #{email, jdbcType=VARCHAR}, '%')
             </if>
             <if test="sex != null">
                 and emp.sex = #{sex, jdbcType=CHAR}
@@ -230,37 +417,8 @@
             <if test="dep != null and dep.did !=null">
                 and dep.did = #{dep.did, jdbcType=INTEGER}
             </if>
-            <if test="dep != null and dep.depName !=null">
-                and dep.dep_name like concat('%', #{dep.depName, jdbcType=INTEGER}, '%')
-            </if>
-        </trim>
-    </select>
-
-    <select id="selectSelective2" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="SelectResultMap">
-        select <include refid="Base_Column_List"/>
-        from t_emp emp
-        <trim prefix="where" >
-            1=1
-            <if test="eid != null">
-                and emp.eid = #{eid, jdbcType=BIGINT}
-            </if>
-            <if test="empName != null and empName != ''">
-                and emp.emp_name like concat('%', #{empName, jdbcType=VARCHAR}, '%')
-            </if>
-            <if test="empNum != null and empNum != ''">
-                and emp.emp_num = #{empNum, jdbcType=VARCHAR}
-            </if>
-            <if test="sex != null">
-                and emp.sex = #{sex, jdbcType=CHAR}
-            </if>
-            <if test="birthday != null">
-                and emp.birthday = #{birthday, jdbcType=DATE}
-            </if>
-            <if test="empAddress != null">
-                and emp.emp_address like concat('%', #{empAddress, jdbcType=VARCHAR}, '%')
-            </if>
-            <if test="salary != null">
-                and emp.salary &gt;= #{salary, jdbcType=DECIMAL}
+            <if test="dep != null and dep.depName !=null and dep.depName != ''">
+                and dep.dep_name = #{dep.depName, jdbcType=VARCHAR}
             </if>
         </trim>
     </select>
@@ -269,15 +427,29 @@
         select <include refid="Base_Column_List"/>
         from t_emp emp
         <where>
-            emp.eid = #{id, jdbcType=BIGINT}
+            <choose>
+                <when test="eid != null">
+                    emp.eid = #{eid, jdbcType=BIGINT}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
         </where>
     </select>
 
-    <select id="selectForeignkey" parameterType="long" resultMap="NativeResultMap">
+    <select id="selectForeignkey" parameterType="long" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from t_emp emp
         <where>
-            emp.did = #{id, jdbcType=BIGINT}
+            <choose>
+                <when test="did != null">
+                    emp.did = #{did, jdbcType=BIGINT}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
         </where>
     </select>
 </mapper>

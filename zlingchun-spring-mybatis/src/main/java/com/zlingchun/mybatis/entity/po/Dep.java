@@ -1,9 +1,6 @@
 package com.zlingchun.mybatis.entity.po;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,7 +8,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dep {
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public class Dep extends BaseEntity {
     private Integer did;
 
     private String depName;

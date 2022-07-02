@@ -1,4 +1,6 @@
-package com.zlingchun.mybatis.entity;
+package com.zlingchun.mybatis.entity.po;
+
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -7,6 +9,7 @@ import java.time.LocalDateTime;
  * @create 2022/6/30
  * @description descrip
  */
+@Data
 public class BaseEntity {
     /**
      * 当前页数

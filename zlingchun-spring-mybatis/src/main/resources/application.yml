@@ -121,6 +121,11 @@ mybatis:
   configuration:
     # 开启自动驼峰命名规则（camel case）映射
     map-underscore-to-camel-case: true
+    # 开启延迟加载
+    lazyLoadingEnabled: true
+    # 关闭加载该对象的所有属性
+    aggressiveLazyLoading: false
+    returnInstanceForEmptyRow: true
 #  config-location: classpath:mybatis-config.xml
 
 pagehelper:

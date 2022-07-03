@@ -75,6 +75,16 @@
                 #{updateTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="depName != null">
+                dep_name = #{depName, jdbcType=DECIMAL},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                updateBy = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            updateTime = now()
+        </trim>
     </insert>
 
     <!--  int insertBatch(List<Dep> record);-->
@@ -84,6 +94,9 @@
         <foreach collection="deps" index="index" item="dep" separator=",">
             ( #{dep.depName,jdbcType=VARCHAR}, #{dep.createBy,jdbcType=VARCHAR}, now(), #{dep.updateBy,jdbcType=VARCHAR}, now())
         </foreach>
+        ON DUPLICATE KEY UPDATE
+        updateBy = values(updateBy),
+        updateTime = now()
     </insert>
 
     <!--  int updateSelective(Dep record);-->
@@ -108,6 +121,9 @@
                 </otherwise>
             </choose>
         </where>
+        ON DUPLICATE KEY INSERT
+        updateBy = values(updateBy),
+        updateTime = now()
     </update>
 
     <!--  int deleteSelective(Dep record);-->

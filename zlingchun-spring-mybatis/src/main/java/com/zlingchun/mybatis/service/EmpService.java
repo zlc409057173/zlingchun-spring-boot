@@ -9,11 +9,34 @@ import java.util.List;
  * @create 2022/6/29
  * @description descrip
  */
-public interface EmpService {
+public abstract class EmpService implements BaseService<Emp> {
 
-    List<Emp> findEmps(Emp emp);
+    /**
+     * 新增部门
+     * @param emp
+     * @return
+     */
+    public abstract int save(Emp emp);
 
-    List<Emp> findEmps(Emp emp, Integer pageNum, Integer pageSize);
+    /**
+     * 判断是否存在，存在更新，不存在新增
+     * @param record
+     * @return
+     */
+    public abstract Emp exit(Emp record);
+    /**
+     * 查询唯一
+     * @param record
+     * @return
+     */
+    public abstract Emp findPrimary(Emp record);
 
-    int batchSave(List<Emp> emps);
+    public abstract int modify(Emp record);
+
+    public abstract int remove(Emp record);
+
+    public abstract List<Emp> findSelective(Emp record);
+
+    public abstract List<Emp> selectSelectiveJoinDep(Emp record);
+
 }

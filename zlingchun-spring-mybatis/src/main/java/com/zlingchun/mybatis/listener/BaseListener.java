@@ -6,8 +6,7 @@ import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.util.ConverterUtils;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson2.JSON;
-import com.zlingchun.mybatis.entity.po.Emp;
-import com.zlingchun.mybatis.service.EmpService;
+import com.zlingchun.mybatis.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
@@ -16,29 +15,28 @@ import java.util.Map;
 
 /**
  * @author achun
- * @create 2022/6/29
+ * @create 2022/7/1
  * @description descrip
  */
-// 有个很重要的点 EmpListener 不能被spring管理，要每次读取excel都要new,然后里面用到spring可以构造方法传进去
 @Slf4j
-public class EmpListener implements ReadListener<Emp> {
-    EmpService dataService;
+public class BaseListener<T> implements ReadListener<T> {
+    BaseService<T> baseService;
 
-    public EmpListener() {
+    public BaseListener() {
     }
 
-    public EmpListener(EmpService dataService) {
-        this.dataService = dataService;
+    public BaseListener(BaseService dataService) {
+        this.baseService = dataService;
     }
 
     /**
-      * 每隔5条存储数据库，实际使用中可以100条，然后清理list ，方便内存回收
+     * 每隔5条存储数据库，实际使用中可以100条，然后清理list ，方便内存回收
      */
     private static final int BATCH_COUNT = 100;
     /**
-      * 缓存的数据
+     * 缓存的数据
      */
-    private List<Emp> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+    private List<T> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
 
     /**
      * 这个每一条数据解析都会来调用
@@ -47,12 +45,12 @@ public class EmpListener implements ReadListener<Emp> {
      * @param context
      */
     @Override
-    public void invoke(Emp data, AnalysisContext context) {
+    public void invoke(T data, AnalysisContext context) {
         log.info("解析到一条数据:{}", JSON.toJSONString(data));
         cachedDataList.add(data);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
         if (cachedDataList.size() >= BATCH_COUNT) {
-            dataService.batchSave(cachedDataList);
+            baseService.saveBatch(cachedDataList);
             // 存储完成清理 list
             cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
         }
@@ -66,7 +64,7 @@ public class EmpListener implements ReadListener<Emp> {
     public void doAfterAllAnalysed(AnalysisContext context) {
         // 这里也要保存数据，确保最后遗留的数据也存储到数据库
         if(!CollectionUtils.isEmpty(cachedDataList)){
-            dataService.batchSave(cachedDataList);
+            baseService.saveBatch(cachedDataList);
         }
         log.info("所有数据解析完成！");
     }

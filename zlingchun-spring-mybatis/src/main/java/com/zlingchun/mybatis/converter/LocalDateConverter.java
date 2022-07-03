@@ -3,12 +3,12 @@ package com.zlingchun.mybatis.converter;
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.GlobalConfiguration;
-import com.alibaba.excel.metadata.data.DataFormatData;
 import com.alibaba.excel.metadata.data.ReadCellData;
 import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 import com.alibaba.excel.util.DateUtils;
 import com.alibaba.excel.util.WorkBookUtil;
+import org.apache.poi.ss.usermodel.DateUtil;
 
 import java.time.LocalDate;
 
@@ -26,17 +26,18 @@ public class LocalDateConverter implements Converter<LocalDate> {
 
     @Override
     public CellDataTypeEnum supportExcelTypeKey() {
-        return CellDataTypeEnum.DATE;
+        return CellDataTypeEnum.NUMBER;
     }
 
     @Override
     public LocalDate convertToJavaData(ReadCellData<?> cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) throws Exception {
-        DataFormatData dataFormatData = cellData.getDataFormatData();
-        String format = dataFormatData.getFormat();
-        if (contentProperty != null && contentProperty.getDateTimeFormatProperty() != null) {
-            format = contentProperty.getDateTimeFormatProperty().getFormat();
+        if (contentProperty == null || contentProperty.getDateTimeFormatProperty() == null) {
+            return DateUtil.getLocalDateTime(cellData.getNumberValue().doubleValue(),
+                    globalConfiguration.getUse1904windowing()).toLocalDate();
+        } else {
+            return DateUtil.getLocalDateTime(cellData.getNumberValue().doubleValue(),
+                    contentProperty.getDateTimeFormatProperty().getUse1904windowing()).toLocalDate();
         }
-        return null;
     }
 
     @Override

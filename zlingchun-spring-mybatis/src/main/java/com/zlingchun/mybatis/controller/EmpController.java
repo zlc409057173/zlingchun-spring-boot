@@ -35,6 +35,7 @@ public class EmpController {
 
     @PostMapping("file")
     public String upload(MultipartFile file){
+        if(file.isEmpty()) return "failed";
         try {
             EasyExcel.read(file.getInputStream(), Emp.class, new BaseListener(empServiceImpl)).sheet().doRead();
         }catch (IOException e){

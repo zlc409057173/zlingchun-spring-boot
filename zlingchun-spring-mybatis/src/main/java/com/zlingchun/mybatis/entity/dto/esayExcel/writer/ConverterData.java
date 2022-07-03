@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.entity.vo.esayExcel.writer;
+package com.zlingchun.mybatis.entity.dto.esayExcel.writer;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;

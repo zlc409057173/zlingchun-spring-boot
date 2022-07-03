@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zlingchun.mybatis.mapper.EmpMapper">
-<!--    <resultMap id="CascadeResultMap" type="com.zlingchun.mybatis.entity.po.Emp">-->
+<!--    <resultMap id="CascadeResultMap" type="com.zlingchun.mybatis.entity.pojojo.Emp">-->
 <!--        <id column="eid" jdbcType="BIGINT" property="eid"/>-->
 <!--        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>-->
 <!--        <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>-->
@@ -13,7 +13,7 @@
 <!--        <result column="dep_name" jdbcType="DECIMAL" property="dep.depName"/>-->
 <!--    </resultMap>-->
 
-    <resultMap id="AssociationResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
+    <resultMap id="AssociationResultMap" type="com.zlingchun.mybatis.entity.pojo.Emp">
         <id column="eid" jdbcType="BIGINT" property="eid"/>
         <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
         <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
@@ -27,7 +27,7 @@
         <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
         <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
-        <association property="dep" javaType="com.zlingchun.mybatis.entity.po.Dep">
+        <association property="dep" javaType="com.zlingchun.mybatis.entity.pojo.Dep">
             <id column="did" jdbcType="INTEGER" property="did"/>
             <result column="dep_name" jdbcType="DECIMAL" property="depName"/>
             <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
@@ -37,7 +37,7 @@
         </association>
     </resultMap>
 
-    <resultMap id="SelectResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
+    <resultMap id="SelectResultMap" type="com.zlingchun.mybatis.entity.pojo.Emp">
         <id column="eid" jdbcType="BIGINT" property="eid"/>
         <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
         <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
@@ -51,7 +51,7 @@
         <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
         <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
-        <association property="dep" javaType="com.zlingchun.mybatis.entity.po.Dep" select="com.zlingchun.mybatis.mapper.DepMapper.selectPrimarykey" column="did" fetchType="lazy">
+        <association property="dep" javaType="com.zlingchun.mybatis.entity.pojo.Dep" select="com.zlingchun.mybatis.mapper.DepMapper.selectPrimarykey" column="did" fetchType="lazy">
             <id column="did" jdbcType="INTEGER" property="did"/>
             <result column="dep_name" jdbcType="DECIMAL" property="depName"/>
             <result column="createByDep" jdbcType="VARCHAR" property="createBy"/>
@@ -61,7 +61,7 @@
         </association>
     </resultMap>
 
-    <resultMap id="BaseResultMap" type="com.zlingchun.mybatis.entity.po.Emp">
+    <resultMap id="BaseResultMap" type="com.zlingchun.mybatis.entity.pojo.Emp">
         <id column="eid" jdbcType="BIGINT" property="eid"/>
         <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
         <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
@@ -87,7 +87,7 @@
     </sql>
 
     <!--  int insertSelective(Emp record);  -->
-    <insert id="insertSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp">
+    <insert id="insertSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Emp">
         insert into t_emp
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="eid != null">
@@ -204,7 +204,7 @@
     </insert>
 
     <!--  int updateSelective(Emp record);  -->
-    <update id="updateSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp">
+    <update id="updateSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Emp">
         update t_emp emp
         <set>
             <if test="empName != null and empName != ''">
@@ -252,7 +252,7 @@
     </update>
 
     <!-- int deleteSelective(Emp record); -->
-    <delete id="deleteSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp">
+    <delete id="deleteSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Emp">
         delete from t_emp emp
         <where>
             <choose>
@@ -328,7 +328,7 @@
     </delete>
 
     <!--  Emp selectPrimary(Emp record);  -->
-    <select id="selectPrimary" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="BaseResultMap">
+    <select id="selectPrimary" parameterType="com.zlingchun.mybatis.entity.pojo.Emp" resultMap="BaseResultMap">
         select <include refid="Base_Column_List"/>
         from t_emp emp
         <where>
@@ -352,7 +352,7 @@
     </select>
 
     <!-- List<Emp> selectSelective(Emp record); -->
-    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="SelectResultMap">
+    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Emp" resultMap="SelectResultMap">
         select <include refid="Base_Column_List"/>
         from t_emp emp
         <trim prefix="where" >
@@ -385,7 +385,7 @@
     </select>
 
     <!-- List<Emp> selectSelectiveLinkDep(Emp record); -->
-    <select id="selectSelectiveJoinDep" parameterType="com.zlingchun.mybatis.entity.po.Emp" resultMap="AssociationResultMap">
+    <select id="selectSelectiveJoinDep" parameterType="com.zlingchun.mybatis.entity.pojo.Emp" resultMap="AssociationResultMap">
         select <include refid="EMP_DEP_Column_List"/>
         from t_emp emp left join t_dep dep on emp.did = dep.did
         <trim prefix="where" >

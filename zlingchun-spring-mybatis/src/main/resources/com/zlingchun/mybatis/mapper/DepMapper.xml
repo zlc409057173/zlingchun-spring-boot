@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zlingchun.mybatis.mapper.DepMapper">
-    <resultMap id="BaseResultMap" type="com.zlingchun.mybatis.entity.po.Dep">
+    <resultMap id="BaseResultMap" type="com.zlingchun.mybatis.entity.pojo.Dep">
         <id column="did" jdbcType="INTEGER" property="did"/>
         <result column="dep_name" jdbcType="VARCHAR" property="depName"/>
         <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
@@ -10,14 +10,14 @@
         <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
-    <resultMap id="CollectionResultMap" type="com.zlingchun.mybatis.entity.po.Dep">
+    <resultMap id="CollectionResultMap" type="com.zlingchun.mybatis.entity.pojo.Dep">
         <id column="did" jdbcType="INTEGER" property="did"/>
         <result column="dep_name" jdbcType="VARCHAR" property="depName"/>
         <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
         <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
         <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
-        <collection property="emps" ofType="com.zlingchun.mybatis.entity.po.Emp" select="com.zlingchun.mybatis.mapper.EmpMapper.selectForeignkey" column="did" fetchType="lazy">
+        <collection property="emps" ofType="com.zlingchun.mybatis.entity.pojo.Emp" select="com.zlingchun.mybatis.mapper.EmpMapper.selectForeignkey" column="did" fetchType="lazy">
             <id column="eid" jdbcType="BIGINT" property="eid"/>
             <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
             <result column="emp_num" jdbcType="VARCHAR" property="empNum"/>
@@ -42,7 +42,7 @@
     </sql>
 
     <!--  int insertSelective(Dep record);-->
-    <insert id="insertSelective" parameterType="com.zlingchun.mybatis.entity.po.Dep" useGeneratedKeys="true"
+    <insert id="insertSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Dep" useGeneratedKeys="true"
             keyProperty="did">
         insert into t_dep
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -100,7 +100,7 @@
     </insert>
 
     <!--  int updateSelective(Dep record);-->
-    <update id="updateSelective" parameterType="com.zlingchun.mybatis.entity.po.Dep">
+    <update id="updateSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Dep">
         update t_dep
         <set>
             <if test="depName != null and depName != ''">
@@ -127,7 +127,7 @@
     </update>
 
     <!--  int deleteSelective(Dep record);-->
-    <delete id="deleteSelective" parameterType="com.zlingchun.mybatis.entity.po.Dep">
+    <delete id="deleteSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Dep">
         delete from t_dep
         <where>
             <choose>
@@ -145,7 +145,7 @@
     </delete>
 
     <!--  Dep selectPrimary(Dep record);-->
-    <select id="selectPrimary" parameterType="com.zlingchun.mybatis.entity.po.Dep" resultType="com.zlingchun.mybatis.entity.po.Dep">
+    <select id="selectPrimary" parameterType="com.zlingchun.mybatis.entity.pojo.Dep" resultType="com.zlingchun.mybatis.entity.pojo.Dep">
         select
         <include refid="Base_Column_List"/>
         from t_dep
@@ -165,8 +165,8 @@
     </select>
 
     <!--  List<Dep> selectSelective(Dep record);-->
-    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.po.Dep"
-            resultType="com.zlingchun.mybatis.entity.po.Dep">
+    <select id="selectSelective" parameterType="com.zlingchun.mybatis.entity.pojo.Dep"
+            resultType="com.zlingchun.mybatis.entity.pojo.Dep">
         select
         <include refid="Base_Column_List"/>
         from t_dep
@@ -190,7 +190,7 @@
     </select>
 
     <!--  Dep selectPrimarykey(@Param("did") Integer did);-->
-    <select id="selectPrimarykey" parameterType="int" resultType="com.zlingchun.mybatis.entity.po.Dep">
+    <select id="selectPrimarykey" parameterType="int" resultType="com.zlingchun.mybatis.entity.pojo.Dep">
         select
         <include refid="Base_Column_List"/>
         from t_dep
@@ -206,7 +206,7 @@
         </where>
     </select>
 
-    <select id="selectSelectiveLinkEmps" parameterType="com.zlingchun.mybatis.entity.po.Dep" resultMap="CollectionResultMap">
+    <select id="selectSelectiveLinkEmps" parameterType="com.zlingchun.mybatis.entity.pojo.Dep" resultMap="CollectionResultMap">
         select
         <include refid="Base_Column_List"/>
         from t_dep

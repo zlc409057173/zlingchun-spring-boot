@@ -1,6 +1,6 @@
 package com.zlingchun.mybatis.mapper;
 
-import com.zlingchun.mybatis.entity.po.Dep;
+import com.zlingchun.mybatis.entity.pojo.Dep;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

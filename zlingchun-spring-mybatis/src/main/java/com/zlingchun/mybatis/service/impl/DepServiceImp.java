@@ -1,7 +1,7 @@
 package com.zlingchun.mybatis.service.impl;
 
 import com.alibaba.fastjson2.JSON;
-import com.zlingchun.mybatis.entity.po.Dep;
+import com.zlingchun.mybatis.entity.pojo.Dep;
 import com.zlingchun.mybatis.mapper.DepMapper;
 import com.zlingchun.mybatis.service.DepService;
 import lombok.extern.slf4j.Slf4j;

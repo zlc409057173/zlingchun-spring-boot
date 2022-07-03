@@ -1,6 +1,6 @@
 package com.zlingchun.mybatis.service;
 
-import com.zlingchun.mybatis.entity.po.Emp;
+import com.zlingchun.mybatis.entity.pojo.Emp;
 
 import java.util.List;
 

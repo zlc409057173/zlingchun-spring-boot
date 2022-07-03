@@ -24,7 +24,7 @@
         </javaTypeResolver>
 
         <!-- 生成model实体类文件位置 -->
-        <javaModelGenerator targetPackage="com.zlingchun.mybatis.entity.po"
+        <javaModelGenerator targetPackage="com.zlingchun.mybatis.entity.pojo"
                             targetProject="src\main\java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>

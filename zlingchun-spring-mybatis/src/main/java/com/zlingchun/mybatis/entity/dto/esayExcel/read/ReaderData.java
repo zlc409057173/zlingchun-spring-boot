@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.entity.vo.esayExcel.read;
+package com.zlingchun.mybatis.entity.dto.esayExcel.read;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;

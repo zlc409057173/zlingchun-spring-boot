@@ -2,7 +2,7 @@ package com.zlingchun.mybatis.service;
 
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson.JSON;
-import com.zlingchun.mybatis.entity.po.Dep;
+import com.zlingchun.mybatis.entity.pojo.Dep;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;

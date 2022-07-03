@@ -3,7 +3,7 @@ package com.zlingchun.mybatis.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.util.MapUtils;
 import com.alibaba.fastjson2.JSON;
-import com.zlingchun.mybatis.entity.po.Emp;
+import com.zlingchun.mybatis.entity.pojo.Emp;
 import com.zlingchun.mybatis.listener.BaseListener;
 import com.zlingchun.mybatis.service.EmpService;
 import com.zlingchun.mybatis.utils.FileUtils;

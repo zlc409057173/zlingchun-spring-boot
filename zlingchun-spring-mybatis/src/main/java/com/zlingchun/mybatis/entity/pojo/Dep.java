@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.entity.po;
+package com.zlingchun.mybatis.entity.pojo;
 
 import lombok.*;
 

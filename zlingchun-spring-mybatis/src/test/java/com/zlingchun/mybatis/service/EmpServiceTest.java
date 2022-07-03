@@ -2,8 +2,8 @@ package com.zlingchun.mybatis.service;
 
 import cn.hutool.core.lang.Snowflake;
 import com.alibaba.excel.util.ListUtils;
-import com.zlingchun.mybatis.entity.po.Dep;
-import com.zlingchun.mybatis.entity.po.Emp;
+import com.zlingchun.mybatis.entity.pojo.Dep;
+import com.zlingchun.mybatis.entity.pojo.Emp;
 import com.zlingchun.mybatis.utils.RandomInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;

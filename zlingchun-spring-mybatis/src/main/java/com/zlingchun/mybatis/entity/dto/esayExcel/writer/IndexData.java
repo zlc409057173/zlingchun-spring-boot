@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.entity.vo.esayExcel.writer;
+package com.zlingchun.mybatis.entity.dto.esayExcel.writer;
 
 import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.EqualsAndHashCode;
@@ -15,11 +15,14 @@ import java.util.Date;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class ComplexHeadData {
-    @ExcelProperty({"主标题", "字符串标题"})
+public class IndexData {
+    @ExcelProperty(value = "字符串标题", index = 0)
     private String string;
-    @ExcelProperty({"主标题", "日期标题"})
+    @ExcelProperty(value = "日期标题", index = 1)
     private Date date;
-    @ExcelProperty({"主标题", "数字标题"})
+    /**
+     * 这里设置3 会导致第二列空的
+     */
+    @ExcelProperty(value = "数字标题", index = 3)
     private Double doubleData;
 }

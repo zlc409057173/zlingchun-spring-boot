@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.entity.po;
+package com.zlingchun.mybatis.entity.pojo;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;

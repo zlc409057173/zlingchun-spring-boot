@@ -2,10 +2,23 @@ server:
   port: 8082
 ### 配置数据源 （Druid）###
 spring:
-  main:
-      allow-circular-references: true
   profiles:
     active: dev
+  main:
+      allow-circular-references: true
+  # 初始化脚本配置
+  sql:
+    init:
+      # 数据库初始化表结构DDL
+      schemaLocations:
+        - classpath:sql/schema.sql
+      # 数据库初始化数据DML
+      dataLocations:
+        - classpath:sql/data.sql
+      encoding: UTF-8
+      # always:每次应用一启动就执行上面两个脚本; never/embedded:表示不执行脚本
+      mode: never
+  # 数据源配置
   datasource:
     ### JDBC 基本配置 ###
     driver-class-name: com.mysql.cj.jdbc.Driver  # mysql8 的连接驱动
@@ -90,14 +103,6 @@ spring:
         login-password: ENC(Nj94S/baROPtHRTJkTJ+dg==)
         allow: 127.0.0.1  # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
         deny:       # 拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
-  sql:
-    init:
-      schemaLocations:
-        - classpath:sql/schema.sql
-      dataLocations:
-        - classpath:sql/data.sql
-      encoding: UTF-8
-      mode: never
   encrypt:
     #加密key，必须是16位，代码中使用了右移一位，因此这里必须要配置为32位
     key: d86d7bab3d6ac01ad9dc6a897652f2d2
@@ -108,16 +113,18 @@ spring:
 
     requestDecryptUriList[0]: /save
     requestDecryptUriList[1]: /update
+# 数据库连接加密配置
 jasypt:
   encryptor:
     password: lybgeek
     algorithm: PBEWithMD5AndDES
     iv-generator-classname: org.jasypt.iv.NoIvGenerator
+# mybatis基本配置
 mybatis:
   # sql隐射文件位置
   mapper-locations: classpath:com/zlingchun/mybatis/mapper/*.xml
   # 别名设置
-  typeAliasesPackage: com.zlingchun.mybatis.**.po
+  typeAliasesPackage: com.zlingchun.mybatis.**.pojo
   configuration:
     # 开启自动驼峰命名规则（camel case）映射
     map-underscore-to-camel-case: true
@@ -127,18 +134,19 @@ mybatis:
     aggressiveLazyLoading: false
     returnInstanceForEmptyRow: true
 #  config-location: classpath:mybatis-config.xml
-
+# 分页基本配置
 pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
   pageSizeZero: true
   params: count=countSql
-
+# 雪花算法配置
 custom:
   snowflake:
     machine-id: 1
     data-center-id: 1
+# 日志级别基本配置
 logging:
   level:
 #    org.mybatis: debug

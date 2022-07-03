@@ -1,8 +1,8 @@
 package com.zlingchun.mybatis.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
-import com.zlingchun.mybatis.entity.po.Dep;
-import com.zlingchun.mybatis.entity.po.Emp;
+import com.zlingchun.mybatis.entity.pojo.Dep;
+import com.zlingchun.mybatis.entity.pojo.Emp;
 import com.zlingchun.mybatis.mapper.EmpMapper;
 import com.zlingchun.mybatis.service.DepService;
 import com.zlingchun.mybatis.service.EmpService;

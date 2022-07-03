@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.converter;
+package com.zlingchun.mybatis.converter.easyExcel;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;

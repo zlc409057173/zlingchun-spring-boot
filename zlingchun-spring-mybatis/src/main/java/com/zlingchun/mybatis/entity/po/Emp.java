@@ -3,9 +3,9 @@ package com.zlingchun.mybatis.entity.po;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
-import com.zlingchun.mybatis.converter.DepNameConverter;
-import com.zlingchun.mybatis.converter.LocalDateConverter;
-import com.zlingchun.mybatis.converter.SexConverter;
+import com.zlingchun.mybatis.converter.easyExcel.DepNameConverter;
+import com.zlingchun.mybatis.converter.easyExcel.LocalDateConverter;
+import com.zlingchun.mybatis.converter.easyExcel.SexConverter;
 import lombok.*;
 
 import java.math.BigDecimal;

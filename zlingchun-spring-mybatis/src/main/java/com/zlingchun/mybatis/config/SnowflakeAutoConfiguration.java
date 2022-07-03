@@ -1,6 +1,7 @@
-package com.zlingchun.mybatis.properties;
+package com.zlingchun.mybatis.config;
 
 import cn.hutool.core.lang.Snowflake;
+import com.zlingchun.mybatis.properties.SnowflakeProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

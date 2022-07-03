@@ -2,7 +2,7 @@ package com.zlingchun.mybatis.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.zlingchun.mybatis.entity.vo.esayExcel.read.ReaderData;
-import com.zlingchun.mybatis.service.ReaderDataService;
+import com.zlingchun.mybatis.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class ReaderDataServiceImp extends ReaderDataService<ReaderData> {
+public class ReaderDataServiceImp implements BaseService<ReaderData> {
 
     @Override
     public int saveBatch(List<ReaderData> readerDatas) {

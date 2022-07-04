@@ -1,6 +1,7 @@
-package com.zlingchun.mybatis.entity.pojo;
+package com.zlingchun.mybatis.entity.dto;
 
 import com.zlingchun.mybatis.entity.BaseEntity;
+import com.zlingchun.mybatis.entity.pojo.Emp;
 import lombok.*;
 
 import java.util.List;
@@ -11,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class Dep extends BaseEntity {
+public class DepDto extends BaseEntity {
     private Integer did;
 
-    private String depName;
+    private String name;
 
     private List<Emp> emps;
 }

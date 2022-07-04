@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.utils;
+package com.zlingchun.mybatis.utils.test;
 
 
 import org.springframework.util.StringUtils;
@@ -11,7 +11,7 @@ import java.util.Random;
  *
  */
 public class RandomInfo {
-    private static Random random = new Random();
+    public static Random random = new Random();
     /**
      * 生成随机数
      */

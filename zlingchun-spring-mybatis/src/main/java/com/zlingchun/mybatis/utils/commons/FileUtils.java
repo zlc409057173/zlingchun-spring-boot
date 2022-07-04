@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.utils;
+package com.zlingchun.mybatis.utils.commons;
 
 import com.alibaba.excel.EasyExcel;
 

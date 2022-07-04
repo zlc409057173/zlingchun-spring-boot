@@ -5,7 +5,7 @@ import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson2.JSON;
 import com.zlingchun.mybatis.entity.pojo.Dep;
 import com.zlingchun.mybatis.entity.pojo.Emp;
-import com.zlingchun.mybatis.utils.RandomInfo;
+import com.zlingchun.mybatis.utils.test.RandomInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

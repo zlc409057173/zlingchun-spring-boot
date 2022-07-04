@@ -1,6 +1,7 @@
-package com.zlingchun.mybatis.utils;
+package com.zlingchun.mybatis.utils.test;
 
 import com.cxytiandi.encrypt.algorithm.EncryptAlgorithm;
+import com.zlingchun.mybatis.utils.security.RSAUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -13,10 +14,10 @@ import java.util.Map;
  * @description descrip
  */
 @Component
-public class RsaEncryptAlgorithm implements EncryptAlgorithm {
+public class RSAEncryptAlgorithm implements EncryptAlgorithm {
     private static Map<String, Object> map = new HashMap<>(2);
 
-    public RsaEncryptAlgorithm(){
+    public RSAEncryptAlgorithm(){
         if(CollectionUtils.isEmpty(map)){
             map = RSAUtils.init();
         }

@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.entity.pojo;
+package com.zlingchun.mybatis.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
 import lombok.Data;

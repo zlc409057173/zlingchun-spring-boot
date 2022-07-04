@@ -1,5 +1,6 @@
 package com.zlingchun.mybatis.utils;
 
+import com.zlingchun.mybatis.utils.test.JasyptEncryptorUtils;
 import org.junit.jupiter.api.Test;
 
 /**

@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.utils;
+package com.zlingchun.mybatis.utils.security;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;

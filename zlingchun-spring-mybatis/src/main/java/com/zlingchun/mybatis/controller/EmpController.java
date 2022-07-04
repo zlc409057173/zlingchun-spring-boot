@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSON;
 import com.zlingchun.mybatis.entity.pojo.Emp;
 import com.zlingchun.mybatis.listener.BaseListener;
 import com.zlingchun.mybatis.service.EmpService;
-import com.zlingchun.mybatis.utils.FileUtils;
+import com.zlingchun.mybatis.utils.commons.FileUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

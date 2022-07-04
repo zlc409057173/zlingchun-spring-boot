@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.utils;
+package com.zlingchun.mybatis.utils.commons;
 
 import lombok.extern.slf4j.Slf4j;
 

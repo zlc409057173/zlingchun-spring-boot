@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.utils;
+package com.zlingchun.mybatis.utils.test;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.properties.PropertyValueEncryptionUtils;

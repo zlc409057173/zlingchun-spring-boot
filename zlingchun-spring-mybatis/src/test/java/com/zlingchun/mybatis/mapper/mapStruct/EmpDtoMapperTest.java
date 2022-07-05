@@ -5,6 +5,7 @@ import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson.JSON;
 import com.zlingchun.mybatis.converter.mapper.EmpMapper;
 import com.zlingchun.mybatis.entity.dto.EmpDto;
+import com.zlingchun.mybatis.entity.pojo.Dep;
 import com.zlingchun.mybatis.entity.pojo.Emp;
 import com.zlingchun.mybatis.utils.test.RandomInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class EmpDtoMapperTest {
                     .salary(salary[random.nextInt(salary.length)].multiply(BigDecimal.valueOf(random.nextFloat())).setScale(2, RoundingMode.HALF_UP))
                     .sex(sexs[random.nextInt(sexs.length)])
                     .empAddress(RandomInfo.getRandomAddress())
-                    //.dep(Dep.builder().depName(depNames[RandomInfo.randomInt(depNames.length)]).did(RandomInfo.randomInt(100)).build())
+                    .dep(Dep.builder().depName(depNames[RandomInfo.randomInt(depNames.length)]).did(RandomInfo.randomInt(100)).build())
                     .build());
         }
     }

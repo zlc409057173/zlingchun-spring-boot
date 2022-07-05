@@ -50,7 +50,4 @@ public class EmpDto extends BaseEntity {
     private Integer did;
     @ExcelProperty(value = "部门", order = 8)
     private String depName;
-    @ExcelIgnore
-    private DepDto depDto;
-
 }

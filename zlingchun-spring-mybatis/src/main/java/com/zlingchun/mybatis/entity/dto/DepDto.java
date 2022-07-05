@@ -1,7 +1,6 @@
 package com.zlingchun.mybatis.entity.dto;
 
 import com.zlingchun.mybatis.entity.BaseEntity;
-import com.zlingchun.mybatis.entity.pojo.Emp;
 import lombok.*;
 
 import java.util.List;
@@ -17,5 +16,5 @@ public class DepDto extends BaseEntity {
 
     private String name;
 
-    private List<Emp> emps;
+    private List<EmpDto> emps;
 }

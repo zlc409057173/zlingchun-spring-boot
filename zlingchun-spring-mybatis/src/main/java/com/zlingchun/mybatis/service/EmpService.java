@@ -1,6 +1,6 @@
 package com.zlingchun.mybatis.service;
 
-import com.zlingchun.mybatis.entity.pojo.Emp;
+import com.zlingchun.mybatis.entity.dto.EmpDto;
 
 import java.util.List;
 
@@ -9,34 +9,36 @@ import java.util.List;
  * @create 2022/6/29
  * @description descrip
  */
-public abstract class EmpService implements BaseService<Emp> {
+public abstract class EmpService implements BaseService<EmpDto> {
 
     /**
      * 新增部门
-     * @param emp
+     * @param empDto
      * @return
      */
-    public abstract int save(Emp emp);
+    public abstract int save(EmpDto empDto);
 
     /**
      * 判断是否存在，存在更新，不存在新增
      * @param record
      * @return
      */
-    public abstract Emp exit(Emp record);
+    public abstract EmpDto exit(EmpDto record);
     /**
      * 查询唯一
      * @param record
      * @return
      */
-    public abstract Emp findPrimary(Emp record);
+    public abstract EmpDto findPrimary(EmpDto record);
 
-    public abstract int modify(Emp record);
+    public abstract EmpDto findPrimarykey(Long eid);
 
-    public abstract int remove(Emp record);
+    public abstract int modify(EmpDto record);
 
-    public abstract List<Emp> findSelective(Emp record);
+    public abstract int remove(Long eid);
 
-    public abstract List<Emp> selectSelectiveJoinDep(Emp record);
+    public abstract List<EmpDto> findSelective(EmpDto record);
+
+    public abstract List<EmpDto> findSelectiveJoinDep(EmpDto record);
 
 }

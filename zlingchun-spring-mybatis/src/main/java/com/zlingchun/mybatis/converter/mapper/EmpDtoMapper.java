@@ -21,10 +21,10 @@ import java.util.List;
  * @create 2022/7/3
  * @description descrip
  */
-@Mapper(uses = MapStructHelper.class)
-public interface EmpMapper {
+@Mapper(componentModel = "spring", uses = MapStructHelper.class)
+public interface EmpDtoMapper {
 
-    EmpMapper INSTANCE = Mappers.getMapper(EmpMapper.class);
+    EmpDtoMapper INSTANCE = Mappers.getMapper(EmpDtoMapper.class);
 
     BigDecimal[] salary = {BigDecimal.valueOf(8000.01), BigDecimal.valueOf(10000.5), BigDecimal.valueOf(3000)};
     String[] sexs = {"男", "女"};
@@ -49,8 +49,9 @@ public interface EmpMapper {
             @Mapping(target = "address", source = "empAddress"),
             @Mapping(target = "sex", expression = "java(com.zlingchun.mybatis.utils.MapStructHelper.sexChar2Str(emp.getSex()))"),
             @Mapping(target = "email", ignore = true),
-            @Mapping(target = "depDto", source = "dep"),
-            @Mapping(target = "telNumber", qualifiedByName = MapStructConstant.SENSITIVE_TELNUMBER)
+            @Mapping(target = "telNumber", qualifiedByName = MapStructConstant.SENSITIVE_TELNUMBER),
+            @Mapping(target = "did", source = "dep.did"),
+            @Mapping(target = "depName", source = "dep.depName")
     })
     EmpDto emp2EmpDto(Emp emp);
 
@@ -64,6 +65,9 @@ public interface EmpMapper {
     @InheritInverseConfiguration(name = "emp2EmpDto")
     Emp empDto2Emp(EmpDto empDto);
 
+    @Mapping(target = "eid", source = "eid")
+    EmpDto empDto2Emp(Long eid);
+
     List<Emp> empDto2Emp(List<EmpDto> empDtos);
 
     @InheritConfiguration(name = "emp2EmpDto")
@@ -71,7 +75,7 @@ public interface EmpMapper {
 
     @BeforeMapping
     default void emp2EmpDtoBefore(Emp emp){
-        emp.setDep(Dep.builder().did(20).depName("经理").build());
+        // do nothing
     }
 
     @AfterMapping

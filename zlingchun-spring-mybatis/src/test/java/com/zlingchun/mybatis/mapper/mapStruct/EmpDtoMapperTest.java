@@ -3,7 +3,7 @@ package com.zlingchun.mybatis.mapper.mapStruct;
 import cn.hutool.core.lang.Snowflake;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson.JSON;
-import com.zlingchun.mybatis.converter.mapper.EmpMapper;
+import com.zlingchun.mybatis.converter.mapper.EmpDtoMapper;
 import com.zlingchun.mybatis.entity.dto.EmpDto;
 import com.zlingchun.mybatis.entity.pojo.Dep;
 import com.zlingchun.mybatis.entity.pojo.Emp;
@@ -56,7 +56,7 @@ public class EmpDtoMapperTest {
         stopWatch.start("开始拷贝！");
         Emp emp = emps.get(0);
         log.info("源数据：{}",JSON.toJSONString(emp));
-        EmpDto empDto = EmpMapper.INSTANCE.emp2EmpDto(emp);
+        EmpDto empDto = EmpDtoMapper.INSTANCE.emp2EmpDto(emp);
         stopWatch.stop();
         log.info("转换数据：{}",JSON.toJSONString(empDto));
         log.info("花费时间 {} ms", stopWatch.getTotalTimeMillis());
@@ -66,9 +66,9 @@ public class EmpDtoMapperTest {
     void toEmp(){
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("开始拷贝！");
-        EmpDto empDto = EmpMapper.INSTANCE.baseData();
+        EmpDto empDto = EmpDtoMapper.INSTANCE.baseData();
         log.info("源数据：{}",JSON.toJSONString(empDto));
-        Emp emp = EmpMapper.INSTANCE.empDto2Emp(empDto);
+        Emp emp = EmpDtoMapper.INSTANCE.empDto2Emp(empDto);
         stopWatch.stop();
         log.info("转换数据：{}",JSON.toJSONString(emp));
         log.info("花费时间 {} ms", stopWatch.getTotalTimeMillis());
@@ -78,11 +78,11 @@ public class EmpDtoMapperTest {
     void updateEmpDto(){
         StopWatch stopWatch = new StopWatch();
         stopWatch.start("开始拷贝！");
-        EmpDto empDto = EmpMapper.INSTANCE.baseData();
+        EmpDto empDto = EmpDtoMapper.INSTANCE.baseData();
         log.info("target数据：{}",JSON.toJSONString(empDto));
         Emp emp = emps.get(0);
         log.info("source数据：{}",JSON.toJSONString(emp));
-        EmpMapper.INSTANCE.updateEmpDto(emp, empDto);
+        EmpDtoMapper.INSTANCE.updateEmpDto(emp, empDto);
         stopWatch.stop();
         log.info("转换数据：{}",JSON.toJSONString(empDto));
         log.info("花费时间 {} ms", stopWatch.getTotalTimeMillis());

@@ -23,9 +23,9 @@ import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.zlingchun.mybatis.entity.dto.esayExcel.writer.*;
-import com.zlingchun.mybatis.handler.CommentWriteHandler;
-import com.zlingchun.mybatis.handler.CustomCellWriteHandler;
-import com.zlingchun.mybatis.handler.CustomSheetWriteHandler;
+import com.zlingchun.mybatis.handler.easyexcel.CommentWriteHandler;
+import com.zlingchun.mybatis.handler.easyexcel.CustomCellWriteHandler;
+import com.zlingchun.mybatis.handler.easyexcel.CustomSheetWriteHandler;
 import org.apache.poi.ss.usermodel.*;
 import org.junit.jupiter.api.Test;
 

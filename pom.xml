@@ -45,6 +45,7 @@
         <mapstruct-version>1.4.2.Final</mapstruct-version>
         <lombok-mapstruct-binding-version>0.2.0</lombok-mapstruct-binding-version>
         <guava-version>31.1-jre</guava-version>
+        <pinyin4j-version>2.5.1</pinyin4j-version>
     </properties>
 
     <dependencyManagement>
@@ -151,6 +152,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.belerweb</groupId>
+                <artifactId>pinyin4j</artifactId>
+                <version>${pinyin4j-version}</version>
             </dependency>
 
         </dependencies>

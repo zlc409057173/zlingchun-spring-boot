@@ -18,6 +18,10 @@ spring:
       encoding: UTF-8
       # always:每次应用一启动就执行上面两个脚本; never/embedded:表示不执行脚本
       mode: never
+  # 返回前端数据JSON Date日期格式化配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   # 数据源配置
   datasource:
     ### JDBC 基本配置 ###

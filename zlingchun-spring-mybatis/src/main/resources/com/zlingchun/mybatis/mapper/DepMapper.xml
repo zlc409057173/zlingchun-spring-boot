@@ -151,11 +151,11 @@
         from t_dep
         <where>
             <choose>
-                <when test="did != null">
-                    did = #{did,jdbcType=INTEGER}
-                </when>
                 <when test="depName != null and depName != ''">
                     dep_name = #{depName,jdbcType=VARCHAR}
+                </when>
+                <when test="did != null">
+                    did = #{did,jdbcType=INTEGER}
                 </when>
                 <otherwise>
                     1=2

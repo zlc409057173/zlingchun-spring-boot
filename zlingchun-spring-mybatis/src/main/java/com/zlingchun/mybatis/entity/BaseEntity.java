@@ -1,6 +1,8 @@
 package com.zlingchun.mybatis.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -25,11 +27,15 @@ public class BaseEntity {
     /**
      * 创建人
      */
+    @JsonIgnore
     @ExcelIgnore
     private String createBy;
     /**
      * 创建时间
      */
+//    @JsonIgnore
+    //格式化处理
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ExcelIgnore
     private LocalDateTime createTime;
     /**
@@ -40,6 +46,7 @@ public class BaseEntity {
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ExcelIgnore
     private LocalDateTime updateTime;
 }

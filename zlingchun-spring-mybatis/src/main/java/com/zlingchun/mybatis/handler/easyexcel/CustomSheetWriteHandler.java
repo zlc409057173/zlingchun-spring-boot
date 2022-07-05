@@ -1,4 +1,4 @@
-package com.zlingchun.mybatis.handler;
+package com.zlingchun.mybatis.handler.easyexcel;
 
 import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.handler.context.SheetWriteHandlerContext;

@@ -15,7 +15,7 @@ import com.zlingchun.mybatis.entity.pojo.Dep;
 public class SexConverter implements Converter<String> {
     @Override
     public Class<?> supportJavaTypeKey() {
-        return Dep.class;
+        return String.class;
     }
     @Override
     public CellDataTypeEnum supportExcelTypeKey() {

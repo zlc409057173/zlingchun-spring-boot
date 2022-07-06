@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.UnexpectedTypeException;
 import javax.validation.ValidationException;
 import java.util.stream.Collectors;
 
@@ -60,6 +61,10 @@ public class RestExceptionHandler {
                             .map(ObjectError::getDefaultMessage)
                             .collect(Collectors.joining("; "))
             );
+        } else if (e instanceof UnexpectedTypeException) {
+            // BeanValidation GET object param
+            UnexpectedTypeException ex = (UnexpectedTypeException) e;
+            resp = ResultData.fail(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
         }
 
         return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);

@@ -105,7 +105,7 @@ public class EmpController {
     }
 
     @GetMapping
-    public List<EmpDto> findSelective(EmpDto empDto){
+    public List<EmpDto> findSelective(@Validated(value = {ValidGroup.Crud.Query.class}) EmpDto empDto){
         List<EmpDto> empDtos = empServiceImpl.findSelective(empDto);
         log.info("查询数据：{}", JSON.toJSONString(empDtos));
         return empDtos;

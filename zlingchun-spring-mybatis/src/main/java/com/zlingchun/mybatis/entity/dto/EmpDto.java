@@ -9,6 +9,7 @@ import com.zlingchun.mybatis.annotation.EnumString;
 import com.zlingchun.mybatis.entity.BaseEntity;
 import com.zlingchun.mybatis.validator.ValidGroup;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -47,6 +48,7 @@ public class EmpDto extends BaseEntity {
 
     @ColumnWidth(11)
     @ExcelProperty(value = "手机号", order = 3)
+    @Pattern(regexp = "1\\d{10}$", message = "手机号格式错误", groups = {ValidGroup.Crud.Update.class, ValidGroup.Crud.Query.class})
     private String telNumber;
 
     @ExcelProperty(value = "薪资", order = 4)
@@ -56,11 +58,12 @@ public class EmpDto extends BaseEntity {
 
     @ColumnWidth(10)
     @ExcelProperty(value = "生日", order = 5)
-    @Past(message = "生日日期必须是过去")
+    @Past(message = "生日日期必须是过去", groups = {ValidGroup.Crud.Update.class, ValidGroup.Crud.Query.class})
     private String birthday;
 
     @ColumnWidth(30)
     @ExcelProperty(value = "家庭住址", order = 6)
+    @Length(max = 128, message = "地址长度最大不能超过128位", groups = {ValidGroup.Crud.Update.class, ValidGroup.Crud.Query.class})
     private String address;
 
     @ColumnWidth(22)

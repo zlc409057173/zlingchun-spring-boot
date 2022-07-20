@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlingchun.mybatisplus.mapper.CustomerMapper">
+    <resultMap id="BaseCustResult" type="com.zlingchun.mybatisplus.doman.pojo.Customer">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="cus_name" jdbcType="VARCHAR" property="cusName"/>
+        <result column="cus_phone" jdbcType="VARCHAR" property="cusPhone"/>
+        <result column="sex" jdbcType="CHAR" property="sex"/>
+        <result column="age" jdbcType="INTEGER" property="age" />
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        cid as id, cus_name, cus_phone, sex, age, email, status, version, createBy, createTime, updateBy, updateTime
+    </sql>
+
+    <sql id="NATURE_Column_List">
+        cid , cus_name, cus_phone, sex, age, email, status, version, createBy, createTime, updateBy, updateTime
+    </sql>
+    <select id="selectByEmpId" parameterType="long" resultType="com.zlingchun.mybatisplus.doman.pojo.Customer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_customer
+        <where>
+            <choose>
+                <when test="eid != null">
+                    emp_id = #{eid, jdbcType=BIGINT}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <!--
+    <insert id="insertBatch" parameterType="list" useGeneratedKeys="true"
+            keyProperty="did">
+        insert into t_customer (<include refid="NATURE_Column_List"/>) values
+        <foreach collection="custs" index="index" item="cust" separator=",">
+            ( #{cust.id,jdbcType=BIGINT}, #{cust.cusName,jdbcType=VARCHAR}, #{cust.cusPhone,jdbcType=VARCHAR}, #{cust.sex,jdbcType=CHAR}, #{cust.age,jdbcType=INTEGER}, #{cust.email,jdbcType=VARCHAR}, 0,
+             0, #{cust.createBy,jdbcType=VARCHAR}, now(), #{cust.updateBy,jdbcType=VARCHAR}, now())
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        updateBy = values(updateBy),
+        updateTime = now()
+    </insert>
+    -->
+</mapper>

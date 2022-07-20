@@ -1,6 +1,8 @@
-package com.zlingchun.mybatisplus.doman.pojo;
+package com.zlingchun.mybatisplus.doman.dto;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,27 +10,25 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
  * @author achun
- * @create 2022/7/14
+ * @create 2022/7/15
  * @description descrip
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName(value = "t_emp")
-public class Emp implements Serializable {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonPropertyOrder(value = {"id","empName","empNo","empPhone","salary","sex","age","birth","address","email","depId","dep","customers","status","version","updateBy"})
+public class EmpDto implements Serializable {
 
     private static final Long serializableId = 1L;
     /**
      * 主键
      */
-    @TableId(value = "eid", type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 员工名称
@@ -41,7 +41,7 @@ public class Emp implements Serializable {
     /**
      * 手机号
      */
-    private String empPhone;
+    private String phone;
     /**
      * 薪资
      */
@@ -49,7 +49,7 @@ public class Emp implements Serializable {
     /**
      * 性别：0：男；1：女
      */
-    private Integer sex;
+    private String sex;
     /**
      * 年龄
      */
@@ -57,7 +57,8 @@ public class Emp implements Serializable {
     /**
      * 生日日期
      */
-    private LocalDate birth;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private String birth;
     /**
      * 生日日期
      */
@@ -67,47 +68,41 @@ public class Emp implements Serializable {
      */
     private String email;
     /**
-     * 外键， 部门id
-     */
-    private Long depId;
-    /**
      * 部门详情
      */
-    @TableField(exist = false)
-    private Dep dep;
+    private DepDto depDto;
     /**
      * 客户列表
      */
-    @TableField(exist = false)
-    private List<Customer> customers;
+    private List<CustomerDto> customerDtos;
     /**
      * 状态
      */
-    @TableLogic
     private Integer status;
-    /**
-     * 版本号
-     */
-    @Version
-    private Integer version;
     /**
      * 创建人
      */
-    @TableField(fill = FieldFill.INSERT, value = "createBy")
     private String createBy;
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT, value = "createTime")
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String createTime;
     /**
      * 更新人
      */
-    @TableField(fill = FieldFill.UPDATE, value = "updateBy")
     private String updateBy;
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.UPDATE, value = "updateTime")
-    private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String updateTime;
+    /**
+     * 页码，第几页
+     */
+    private Integer pageNum;
+    /**
+     * 每页条数
+     */
+    private Integer pageSize;
 }

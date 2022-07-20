@@ -14,7 +14,7 @@ CREATE TABLE `t_customer` (
     `updateBy` varchar(64) NULL DEFAULT '' COMMENT '更新人',
     `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`cid`) ,
-    UNIQUE INDEX `unique_cus_name_phone` (`cus_name`, `cus_phone`) COMMENT '客户名和手机号唯一'
+    UNIQUE INDEX `unique_cus_name_phone` (`cus_name`, `cus_phone`, `status`, `emp_id`) COMMENT '客户名和手机号唯一'
 );
 
 drop table if exists t_emp;
@@ -37,8 +37,8 @@ CREATE TABLE `t_emp` (
     `updateBy` varchar(16) NULL DEFAULT '' COMMENT '更新人',
     `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`eid`) ,
-    UNIQUE INDEX `unique_emp_no` (`emp_no`) COMMENT '员工号唯一',
-    UNIQUE INDEX `unique_emp_phone` (`emp_phone`) COMMENT '员工手机号唯一'
+    UNIQUE INDEX `unique_emp_no` (`emp_no`, `status`) COMMENT '员工号唯一',
+    UNIQUE INDEX `unique_emp_phone` (`emp_phone`, `status`) COMMENT '员工手机号唯一'
 );
 
 drop table if exists t_dep;
@@ -53,8 +53,8 @@ CREATE TABLE `t_dep` (
     `updateBy` varchar(64) NULL COMMENT '更新人',
     `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`did`) ,
-    UNIQUE INDEX `unique_dep_name` (`dep_name`) COMMENT '部门名称唯一',
-    UNIQUE INDEX `unique_dep_no` (`dep_no`) COMMENT '部门编号唯一'
+    UNIQUE INDEX `unique_dep_name` (`dep_name`, `status`) COMMENT '部门名称唯一',
+    UNIQUE INDEX `unique_dep_no` (`dep_no`, `status`) COMMENT '部门编号唯一'
 );
 
 ALTER TABLE `t_emp` ADD CONSTRAINT `fk_t_emp_t_dep_1` FOREIGN KEY (`dep_id`) REFERENCES `t_dep` (`did`);

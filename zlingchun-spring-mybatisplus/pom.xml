@@ -97,6 +97,15 @@
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>mapper/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <!-- 打包插件 -->
             <plugin>
@@ -129,7 +138,7 @@
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct-version}</version>mapstruct-version
+                            <version>${mapstruct-version}</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>

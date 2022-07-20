@@ -1,13 +1,15 @@
-package com.zlingchun.mybatisplus.doman.pojo;
+package com.zlingchun.mybatisplus.doman.dto;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * @author achun
@@ -18,14 +20,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName(value = "t_dep")
-public class Dep implements Serializable {
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder(value = {"id", "depName", "depNo"})
+public class DepDto implements Serializable {
 
     private static final Long serializableId = 1L;
     /**
      * 主键
      */
-    @TableId(value = "did", type = IdType.AUTO)
     private Long id;
     /**
      * 部门名称
@@ -38,31 +40,37 @@ public class Dep implements Serializable {
     /**
      * 状态
      */
-//    @TableLogic
+    @JsonIgnore
     private Integer status;
     /**
      * 版本号
      */
-    @Version
+    @JsonIgnore
     private Integer version;
     /**
      * 创建人
      */
-    @TableField(fill = FieldFill.INSERT, value = "createBy")
     private String createBy;
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT, value = "createTime")
-    private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String createTime;
     /**
      * 更新人
      */
-    @TableField(fill = FieldFill.UPDATE, value = "updateBy")
     private String updateBy;
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.UPDATE, value = "updateTime")
-    private LocalDateTime updateTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private String updateTime;
+    /**
+     * 页码，第几页
+     */
+    private Integer pageNum;
+    /**
+     * 每页条数
+     */
+    private Integer pageSize;
 }

@@ -5,12 +5,12 @@ import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.doman.pojo.Dep;
 import com.zlingchun.mybatisplus.doman.pojo.Emp;
 import com.zlingchun.mybatisplus.util.test.RandomInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -40,7 +40,7 @@ public class EmpMapperTest {
     private static final Integer[] sexs = {0, 1};
     private static List<Emp> emps = ListUtils.newArrayList();
 
-    @BeforeEach
+//    @BeforeEach
     void baseData() {
         Snowflake snowflake = new Snowflake(1, 1);
         List<Long> depIds = depMapper.selectList(null).stream().distinct().map(Dep::getId).collect(Collectors.toList());
@@ -102,5 +102,12 @@ public class EmpMapperTest {
         queryWrapper.like("emp_name", "向");
         int delete = empMapper.delete(queryWrapper);
         Assertions.assertEquals(1, delete);
+    }
+
+    @Test
+    void selectEmps(){
+        Page<Emp> page = new Page<>(1, 5);
+        List<Emp> emps = empMapper.selectEmpList(page, Emp.builder().dep(Dep.builder().depName("研发").build()).build());
+        log.info(JSON.toJSONString(emps));
     }
 }

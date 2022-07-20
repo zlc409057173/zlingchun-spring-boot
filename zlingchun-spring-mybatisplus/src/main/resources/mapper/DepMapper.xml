@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlingchun.mybatisplus.mapper.DepMapper">
+    <resultMap id="BaseDepResult" type="com.zlingchun.mybatisplus.doman.pojo.Dep">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dep_name" jdbcType="VARCHAR" property="depName"/>
+        <result column="dep_no" jdbcType="VARCHAR" property="depNo"/>
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        did as id, dep_name, dep_no, status, version, createBy, createTime, updateBy, updateTime
+    </sql>
+    <select id="selectByDepId" parameterType="long" resultType="com.zlingchun.mybatisplus.doman.pojo.Dep">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dep
+        <where>
+            <choose>
+                <when test="did != null">
+                    did = #{did, jdbcType=INTEGER}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+</mapper>

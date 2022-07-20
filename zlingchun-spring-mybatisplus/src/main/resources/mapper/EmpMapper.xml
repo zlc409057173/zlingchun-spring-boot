@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zlingchun.mybatisplus.mapper.EmpMapper">
+    <resultMap id="BaseEmpResult" type="com.zlingchun.mybatisplus.doman.pojo.Emp">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="emp_no" jdbcType="VARCHAR" property="empNo"/>
+        <result column="emp_phone" jdbcType="VARCHAR" property="empPhone"/>
+        <result column="salary" jdbcType="DECIMAL" property="salary"/>
+        <result column="sex" jdbcType="CHAR" property="sex"/>
+        <result column="age" jdbcType="INTEGER" property="age" />
+        <result column="birth" jdbcType="DATE" property="birth"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="dep_id" jdbcType="BIGINT" property="depId" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="version" jdbcType="INTEGER" property="version" />
+        <result column="createBy" jdbcType="VARCHAR" property="createBy"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="updateBy" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime"/>
+        <association property="dep" javaType="com.zlingchun.mybatisplus.doman.pojo.Dep" select="com.zlingchun.mybatisplus.mapper.DepMapper.selectByDepId" column="dep_id">
+            <id column="did" jdbcType="BIGINT" property="id"/>
+            <result column="dep_name" jdbcType="VARCHAR" property="depName"/>
+            <result column="dep_no" jdbcType="VARCHAR" property="depNo"/>
+            <result column="status" jdbcType="INTEGER" property="status" />
+            <result column="version" jdbcType="INTEGER" property="version" />
+        </association>
+        <collection property="customers" ofType="com.zlingchun.mybatisplus.doman.pojo.Customer" select="com.zlingchun.mybatisplus.mapper.CustomerMapper.selectByEmpId" column="id">
+            <id column="cid" jdbcType="BIGINT" property="id"/>
+            <result column="cus_name" jdbcType="VARCHAR" property="cusName"/>
+            <result column="cus_phone" jdbcType="VARCHAR" property="cusPhone"/>
+            <result column="sex" jdbcType="CHAR" property="sex"/>
+            <result column="age" jdbcType="INTEGER" property="age" />
+            <result column="email" jdbcType="VARCHAR" property="email"/>
+            <result column="status" jdbcType="INTEGER" property="status" />
+            <result column="version" jdbcType="INTEGER" property="version" />
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        eid as id, emp_name, emp_no, emp_phone, salary, sex, age, birth, address, email, dep_id, status, version, createBy, createTime, updateBy, updateTime
+    </sql>
+    <select id="selectEmpList" resultMap="BaseEmpResult">
+        select <include refid="Base_Column_List"/> from t_emp emp
+        <where>
+            <choose>
+                <when test="em.id != null">
+                    eid = #{em.id, jdbcType=BIGINT}
+                </when>
+                <when test="em.empName == null and em.empNo == null and em.empPhone == null and em.email == null and em.sex == null and em.address == null and (em.salary == null or em.birth == null)
+                and (em.dep == null or (em.dep.id == null and em.dep.depName == null))">
+                    1=2
+                </when>
+                <otherwise>
+                    <if test="em.empName != null and em.empName != ''">
+                        and emp_name like concat('%', #{em.empName,jdbcType=VARCHAR}, '%')
+                    </if>
+                    <if test="em.empNo != null and em.empNo != ''">
+                        and emp_no = #{empNo, jdbcType=VARCHAR}
+                    </if>
+                    <if test="em.empPhone != null">
+                        and emp_phone = #{em.empPhone, jdbcType=VARCHAR}
+                    </if>
+                    <if test="em.email != null and em.empName != null and em.empName != ''">
+                        and email = #{em.email, jdbcType=VARCHAR}
+                    </if>
+                    <if test="em.sex != null and em.empName != null and em.empName != ''">
+                        and sex = #{em.sex, jdbcType=CHAR}
+                    </if>
+                    <if test="em.address != null">
+                        and address like concat('%', #{em.address, jdbcType=VARCHAR}, '%')
+                    </if>
+                    <if test="em.salary != null and em.birth != null">
+                        and birth = #{em.birth, jdbcType=DATE}
+                        and salary &gt;= #{em.salary, jdbcType=DECIMAL}
+                    </if>
+                    <if test="em.dep != null and em.dep.id !=null">
+                        and dep_id = #{em.dep.id, jdbcType=INTEGER}
+                    </if>
+                    <if test="em.dep != null and em.dep.depName !=null">
+                        and dep_id = (select did from t_dep where dep_name like concat('%', #{em.dep.depName, jdbcType=VARCHAR}, '%') )
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <select id="selectEmpOne" resultMap="BaseEmpResult">
+        select <include refid="Base_Column_List"/> from t_emp emp
+        <where>
+            status = 0
+            <choose>
+                <when test="em.id != null">
+                    and eid = #{em.id, jdbcType=BIGINT}
+                </when>
+                <when test="em.empNo != null and em.empNo != ''">
+                    and emp_no = #{empNo, jdbcType=VARCHAR}
+                </when>
+                <when test="em.empPhone != null and em.empPhone != ''">
+                    and emp_phone = #{em.empPhone, jdbcType=VARCHAR}
+                </when>
+                <otherwise>
+                    and 1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+</mapper>

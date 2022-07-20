@@ -13,17 +13,32 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     //插入时启动  第三个参数 LocalDateTime 一定要和 createTime成员变量的值的类型一致，不然是null 如果是date就都设置date
     @Override
     public void insertFill(MetaObject metaObject) {
-        log.info("start insert fill ....");
+        log.debug("start insert fill ....");
         //如果属性有值则不覆盖,如果填充值为null则不填充
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now()); // 起始版本 3.3.0(推荐使用)
-        //直接调用setFieldValByName方法，跳过null判断，强制更新updateTime为当前时间
-        this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
-        this.strictInsertFill(metaObject, "version", Integer.class, 0);
+        this.strictInsertFill(metaObject, "createBy", ()-> {
+            try{
+                //这里是我自己项目获取当前session用户id的方法
+                return "CreateUser";
+            }catch(Exception ignored){
+            }
+            return null;
+        }, String.class);
+//        this.strictInsertFill(metaObject, "version", Integer.class, 0);
     }
     //更新时候启动
     @Override
     public void updateFill(MetaObject metaObject) {
-        log.info("start update fill ....");
-        this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);//
+        log.debug("start update fill ....");
+        //直接调用setFieldValByName方法，跳过null判断，强制更新updateTime为当前时间
+        this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
+        this.strictUpdateFill(metaObject, "updateBy", ()-> {
+            try{
+                //这里是我自己项目获取当前session用户id的方法
+                return "UpdateUser";
+            }catch(Exception ignored){
+            }
+            return null;
+        }, String.class);
     }
 }

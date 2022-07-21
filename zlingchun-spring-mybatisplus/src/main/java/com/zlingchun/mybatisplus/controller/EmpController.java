@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -27,36 +26,36 @@ public class EmpController {
     IEmpDtoService empDtoService;
 
     @PostMapping
-    String saveEmp(@RequestBody @Valid EmpDto empDto){
+    String saveEmp(@RequestBody @Validated(value = {ValidGroup.Crud.Create.class}) EmpDto empDto){
         boolean save = empDtoService.save(empDto);
         return save ? ResultConstant.SAVE.getDesc() : ResultConstant.SAVEFAILED.getDesc();
     }
 
     @DeleteMapping
-    String removeEmp(@RequestBody @Valid EmpDto empDto){
+    String removeEmp(@RequestBody @Validated(value = {ValidGroup.Crud.Delete.class}) EmpDto empDto){
         boolean remove = empDtoService.remove(empDto);
         return remove ? ResultConstant.REMOVE.getDesc() : ResultConstant.REMOVEFAILED.getDesc();
     }
 
     @DeleteMapping("{id}")
-    String removeEmp(@PathVariable("id") @NotNull(message = "删除的员工主键不能为空", groups = ValidGroup.Crud.Delete.class) Long id){
+    String removeEmp(@PathVariable("id") @NotNull(message = "删除员工时, 主键不能为空") Long id){
         boolean remove = empDtoService.remove(id);
         return remove ? ResultConstant.REMOVE.getDesc() : ResultConstant.REMOVEFAILED.getDesc();
     }
 
     @PutMapping("{id}")
-    String updateEmp(@PathVariable("id") @NotNull Long id, @RequestBody @Valid EmpDto empDto){
+    String updateEmp(@PathVariable("id") @NotNull(message = "更新员工时, 主键不能为空") Long id, @RequestBody @Validated(value = {ValidGroup.Crud.Update.class}) EmpDto empDto){
         boolean update = empDtoService.update(id, empDto);
         return update ? ResultConstant.UPDATE.getDesc() : ResultConstant.UPDATEFAILED.getDesc();
     }
 
     @GetMapping("list")
-    List<EmpDto> getEmpList(@RequestBody @Valid EmpDto empDto){
+    List<EmpDto> getEmpList(@RequestBody EmpDto empDto){
         return empDtoService.findEmpList(empDto);
     }
 
     @GetMapping("page")
-    Page<EmpDto> getEmpPage(@RequestBody @Valid EmpDto empDto){
+    Page<EmpDto> getEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpDto empDto){
         return empDtoService.findEmpPage(empDto);
     }
 
@@ -66,12 +65,12 @@ public class EmpController {
     }
 
     @GetMapping("only/page")
-    Page<EmpDto> getOnlyEmpPage(@RequestBody @Valid EmpDto empDto){
+    Page<EmpDto> getOnlyEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpDto empDto){
         return empDtoService.findOnlyEmpPage(empDto);
     }
 
     @GetMapping("only/list")
-    List<EmpDto> getOnlyEmpList(@RequestBody @Valid EmpDto empDto){
+    List<EmpDto> getOnlyEmpList(@RequestBody EmpDto empDto){
         return empDtoService.findOnlyEmpList(empDto);
     }
 

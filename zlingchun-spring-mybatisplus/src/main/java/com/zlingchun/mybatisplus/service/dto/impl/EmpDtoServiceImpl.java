@@ -71,10 +71,12 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
         // 获取员工信息，判断是否存在相同信息的员工
         //   1. 如果已经存在，那么就不能新增
         //   2. 不存在就新增，并设置EmpNo
-        EmpDto empOne = this.findOnlyEmpOne(empDto.getId(), empDto.getEmpNo(), empDto.getPhone());
-        if(Objects.nonNull(empOne)){
-            log.debug("An Emp has the same EmpNo or Phone number, Emp = {}", JSON.toJSONString(empOne));
-            throw new IllegalArgumentException("An Emp has the same account or mobile phone number, EmpNo = "+empOne.getEmpNo());
+        if(Objects.nonNull(empDto.getId()) || StringUtils.isNotEmpty(empDto.getEmpNo()) || StringUtils.isNotEmpty(empDto.getPhone())){
+            EmpDto empOne = this.findOnlyEmpOne(empDto.getId(), empDto.getEmpNo(), empDto.getPhone());
+            if(Objects.nonNull(empOne)){
+                log.debug("An Emp has the same EmpNo or Phone number, Emp = {}", JSON.toJSONString(empOne));
+                throw new IllegalArgumentException("An Emp has the same account or mobile phone number, EmpNo = "+empOne.getEmpNo());
+            }
         }
         empDto.setEmpNo(snowflake.nextIdStr().substring(8));
         Emp emp = empToEmpDto.empDto2Emp(empDto);

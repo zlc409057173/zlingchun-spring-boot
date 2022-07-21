@@ -1,7 +1,7 @@
 package com.zlingchun.mybatisplus.handler.response.exceptionHandler;
 
-import com.zlingchun.mybatisplus.handler.response.result.ResultData;
 import com.zlingchun.mybatisplus.handler.response.enums.ReturnCode;
+import com.zlingchun.mybatisplus.handler.response.result.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,22 +21,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class RestExceptionHandler {
-    /**
-     * 默认全局异常处理。
-     * @param e the e
-     * @return ResultData
-     */
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResultData<String> exception(Exception e) {
-        log.error("全局异常信息 ex={}", e.getMessage(), e);
-        return ResultData.fail(ReturnCode.RC500.getCode(),e.getMessage());
-    }
 
     @ExceptionHandler(value = {BindException.class, ValidationException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ResultData<String>> handleValidatedException(Exception e) {
         ResultData<String> resp = null;
-
+        log.error("全局异常信息 ex={}", e.getMessage(), e);
         if (e instanceof MethodArgumentNotValidException) {
             // BeanValidation exception
             MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
@@ -70,4 +59,15 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(resp,HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * 默认全局异常处理。
+     * @param e the e
+     * @return ResultData
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResultData<String> exception(Exception e) {
+        log.error("全局异常信息 ex={}", e.getMessage(), e);
+        return ResultData.fail(ReturnCode.RC500.getCode(),e.getMessage());
+    }
 }

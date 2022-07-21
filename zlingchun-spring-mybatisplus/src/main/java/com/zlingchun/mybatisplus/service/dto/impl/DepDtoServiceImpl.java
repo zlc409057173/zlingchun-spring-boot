@@ -2,6 +2,7 @@ package com.zlingchun.mybatisplus.service.dto.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.converter.mapstruct.EmpToEmpDto;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
 import com.zlingchun.mybatisplus.doman.pojo.Dep;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -88,6 +90,62 @@ public class DepDtoServiceImpl implements IDepDtoService {
         .eq(StringUtils.isNotBlank(dep.getDepName()), Dep::getDepName, dep.getDepName());
         Dep one = depService.getOne(lambdaQueryWrapper);
         return empToEmpDto.dep2DepDto(one);
+    }
+
+    @Override
+    public boolean remove(DepDto depDto) {
+        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
+        return depService.remove(lambdaQueryWrapper);
+    }
+
+    @Override
+    public boolean remove(Long id) {
+        Dep dep = depService.getById(id);
+        if(Objects.isNull(dep)){
+            throw new IllegalArgumentException("This Dep has been deleted!");
+        }
+        return depService.removeById(id);
+    }
+
+    @Override
+    public boolean update(Long id, DepDto depDto) {
+        DepDto depOne = this.findDepOne(depDto);
+        if(Objects.nonNull(depOne)){
+            throw new IllegalArgumentException("You can't update the Dep, The Dep name has existed!");
+        }
+        LambdaQueryWrapper<Dep> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Dep::getId, id);
+        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        return depService.update(dep, lambdaQueryWrapper);
+    }
+
+    @Override
+    public List<DepDto> list(DepDto depDto) {
+        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
+        List<Dep> deps = depService.list(lambdaQueryWrapper);
+        return empToEmpDto.dep2DepDto(deps);
+    }
+
+    @Override
+    public Page<DepDto> page(DepDto depDto) {
+        if(Objects.isNull(depDto.getPageNum()) || Objects.isNull(depDto.getPageSize())) {
+            throw new IllegalArgumentException("The pageNum and pageSize can't empty while Page look!");
+        }
+        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
+        Page<Dep> page = new Page<>(depDto.getPageNum(), depDto.getPageSize());
+        Page<Dep> depPage = depService.page(page, lambdaQueryWrapper);
+        return empToEmpDto.dep2DepDto(depPage);
+    }
+
+    private LambdaQueryWrapper<Dep> getWrapper(Dep dep){
+        LambdaQueryWrapper<Dep> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Objects.nonNull(dep.getId()), Dep::getId, dep.getId())
+                .eq(StringUtils.isNotBlank(dep.getDepName()), Dep::getDepName, dep.getDepName())
+                .eq(StringUtils.isNotBlank(dep.getDepNo()), Dep::getDepNo, dep.getDepNo());
+        return lambdaQueryWrapper;
     }
 
 }

@@ -2,7 +2,7 @@ drop table if exists t_customer;
 CREATE TABLE `t_customer` (
     `cid` bigint(32) NOT NULL COMMENT '主键',
     `cus_name` varchar(64) NOT NULL DEFAULT '' COMMENT '客户名称',
-    `cus_phone` varchar(16) NOT NULL DEFAULT '' COMMENT '客户手机号',
+    `cus_phone` varchar(16) NOT NULL COMMENT '客户手机号',
     `sex` char(2) NOT NULL DEFAULT '0' COMMENT '客户性别：0：男；1：女',
     `age` int(3) NULL COMMENT '客户年龄',
     `email` varchar(64) NULL DEFAULT '' COMMENT '客户邮箱',
@@ -12,7 +12,7 @@ CREATE TABLE `t_customer` (
     `createBy` varchar(64) NULL DEFAULT '' COMMENT '创建人',
     `createTime` datetime NULL COMMENT '创建时间',
     `updateBy` varchar(64) NULL DEFAULT '' COMMENT '更新人',
-    `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    `updateTime` datetime NULL COMMENT '更新时间',
     PRIMARY KEY (`cid`) ,
     UNIQUE INDEX `unique_cus_name_phone` (`cus_name`, `cus_phone`, `status`, `emp_id`) COMMENT '客户名和手机号唯一'
 );
@@ -35,7 +35,7 @@ CREATE TABLE `t_emp` (
     `createBy` varchar(16) NULL DEFAULT '' COMMENT '创建人',
     `createTime` datetime NULL COMMENT '创建时间',
     `updateBy` varchar(16) NULL DEFAULT '' COMMENT '更新人',
-    `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    `updateTime` datetime NULL COMMENT '更新时间',
     PRIMARY KEY (`eid`) ,
     UNIQUE INDEX `unique_emp_no` (`emp_no`, `status`) COMMENT '员工号唯一',
     UNIQUE INDEX `unique_emp_phone` (`emp_phone`, `status`) COMMENT '员工手机号唯一'
@@ -50,8 +50,8 @@ CREATE TABLE `t_dep` (
     `version` int(5) NOT NULL DEFAULT '0' COMMENT '版本号',
     `createBy` varchar(64) NULL DEFAULT '' COMMENT '创建人',
     `createTime` datetime NULL COMMENT '创建时间',
-    `updateBy` varchar(64) NULL COMMENT '更新人',
-    `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+    `updateBy` varchar(64) NULL DEFAULT '' COMMENT '更新人',
+    `updateTime` datetime NULL COMMENT '更新时间',
     PRIMARY KEY (`did`) ,
     UNIQUE INDEX `unique_dep_name` (`dep_name`, `status`) COMMENT '部门名称唯一',
     UNIQUE INDEX `unique_dep_no` (`dep_no`, `status`) COMMENT '部门编号唯一'

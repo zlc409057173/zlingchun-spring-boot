@@ -49,6 +49,10 @@ public interface EmpToEmpDto {
     @Mapping(target = "pageSize", ignore = true)
     DepDto dep2DepDto(Dep dep);
 
+    List<DepDto> dep2DepDto(List<Dep> deps);
+
+    Page<DepDto> dep2DepDto(Page<Dep> depPage);
+
     @Mapping(target = "createTime", dateFormat = "yyyy-MM-dd HH:mm:ss")
     @Mapping(target = "updateTime", dateFormat = "yyyy-MM-dd HH:mm:ss")
     @Mapping(target = "pageNum", ignore = true)

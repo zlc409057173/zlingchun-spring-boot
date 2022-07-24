@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.converter.mapstruct.DepConvert;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
+import com.zlingchun.mybatisplus.doman.dto.DepQueryDto;
 import com.zlingchun.mybatisplus.doman.pojo.Dep;
 import com.zlingchun.mybatisplus.service.dto.IDepDtoService;
 import com.zlingchun.mybatisplus.service.dto.IEmpDtoService;
@@ -56,7 +57,8 @@ public class DepDtoServiceImpl implements IDepDtoService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean save(DepDto depDto){
-        DepDto one = this.findDepOne(depDto);
+        DepQueryDto depQueryDto = depConvert.depDto2DepQueryDto(depDto);
+        DepDto one = this.findDepOne(depQueryDto);
         if(Objects.nonNull(one)){
             // 存在
             depDto.setId(one.getId());
@@ -82,7 +84,8 @@ public class DepDtoServiceImpl implements IDepDtoService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean remove(DepDto depDto) {
-        List<DepDto> depDtos = this.list(depDto);
+        DepQueryDto depQueryDto = depConvert.depDto2DepQueryDto(depDto);
+        List<DepDto> depDtos = this.list(depQueryDto);
         if(CollectionUtils.isEmpty(depDtos)){
             throw new IllegalArgumentException("No such Condition's Emp, " + JSON.toJSONString(depDto));
         }
@@ -95,7 +98,7 @@ public class DepDtoServiceImpl implements IDepDtoService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean remove(Long id) {
-        DepDto depDto = this.findDepOne(DepDto.builder().id(id).build());
+        DepDto depDto = this.findDepOne(DepQueryDto.builder().id(id).build());
         if(Objects.isNull(depDto)){
             throw new IllegalArgumentException("This Dep has been deleted!");
         }
@@ -107,7 +110,8 @@ public class DepDtoServiceImpl implements IDepDtoService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean update(Long id, DepDto depDto) {
-        DepDto depOne = this.findDepOne(depDto);
+        DepQueryDto depQueryDto = depConvert.depDto2DepQueryDto(depDto);
+        DepDto depOne = this.findDepOne(depQueryDto);
         if(Objects.nonNull(depOne)){
             throw new IllegalArgumentException("You can't update the Dep, The Dep name has existed!");
         }
@@ -121,13 +125,13 @@ public class DepDtoServiceImpl implements IDepDtoService {
      * 获取部门信息：
      *   1.1 Id存在，根据Id查询，
      *   1.2 Id不存在，根据DepNo或者DepName查询
-     * @param depDto
+     * @param depQueryDto
      * @return
      */
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public DepDto findDepOne(DepDto depDto){
-        Dep dep = depConvert.depDto2Dep(depDto);
+    public DepDto findDepOne(DepQueryDto depQueryDto){
+        Dep dep = depConvert.depQueryDto2Dep(depQueryDto);
         LambdaQueryWrapper<Dep> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Objects.nonNull(dep.getId()), Dep::getId, dep.getId())
                 .or()
@@ -139,8 +143,8 @@ public class DepDtoServiceImpl implements IDepDtoService {
     }
 
     @Override
-    public List<DepDto> list(DepDto depDto) {
-        Dep dep = depConvert.depDto2Dep(depDto);
+    public List<DepDto> list(DepQueryDto depQueryDto) {
+        Dep dep = depConvert.depQueryDto2Dep(depQueryDto);
         LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
         List<Dep> deps = depService.list(lambdaQueryWrapper);
         return depConvert.dep2DepDto(deps);
@@ -148,13 +152,13 @@ public class DepDtoServiceImpl implements IDepDtoService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Page<DepDto> page(DepDto depDto) {
-        if(Objects.isNull(depDto.getPageNum()) || Objects.isNull(depDto.getPageSize())) {
+    public Page<DepDto> page(DepQueryDto depQueryDto) {
+        if(Objects.isNull(depQueryDto.getPageNum()) || Objects.isNull(depQueryDto.getPageSize())) {
             throw new IllegalArgumentException("The pageNum and pageSize can't empty while Page look!");
         }
-        Dep dep = depConvert.depDto2Dep(depDto);
+        Dep dep = depConvert.depQueryDto2Dep(depQueryDto);
         LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
-        Page<Dep> page = new Page<>(depDto.getPageNum(), depDto.getPageSize());
+        Page<Dep> page = new Page<>(depQueryDto.getPageNum(), depQueryDto.getPageSize());
         Page<Dep> depPage = depService.page(page, lambdaQueryWrapper);
         return depConvert.dep2DepDto(depPage);
     }

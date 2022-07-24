@@ -19,8 +19,6 @@ public interface CustomerConvert {
     @Mapping(target = "sex", qualifiedByName = MapStructConstant.SEX_NUMTOCHINESE)
     @Mapping(target = "createTime", dateFormat = "yyyy-MM-dd HH:mm:ss")
     @Mapping(target = "updateTime", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    @Mapping(target = "pageNum", ignore = true)
-    @Mapping(target = "pageSize", ignore = true)
     CustomerDto customer2CustomerDto(Customer customer);
 
     List<CustomerDto> customer2CustomerDto(List<Customer> customer);

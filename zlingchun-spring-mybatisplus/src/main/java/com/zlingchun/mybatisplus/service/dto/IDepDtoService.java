@@ -2,6 +2,7 @@ package com.zlingchun.mybatisplus.service.dto;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
+import com.zlingchun.mybatisplus.doman.dto.DepQueryDto;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface IDepDtoService {
 
     boolean save(DepDto depDto);
 
-    DepDto findDepOne(DepDto depDto);
+    DepDto findDepOne(DepQueryDto depQueryDto);
 
     boolean remove(DepDto depDto);
 
@@ -22,7 +23,7 @@ public interface IDepDtoService {
 
     boolean update(Long id, DepDto depDto);
 
-    List<DepDto> list(DepDto depDto);
+    List<DepDto> list(DepQueryDto depQueryDto);
 
-    Page<DepDto> page(DepDto depDto);
+    Page<DepDto> page(DepQueryDto depQueryDto);
 }

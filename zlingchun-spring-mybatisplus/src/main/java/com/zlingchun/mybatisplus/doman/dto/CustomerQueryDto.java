@@ -1,8 +1,6 @@
 package com.zlingchun.mybatisplus.doman.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.zlingchun.mybatisplus.validator.ValidGroup;
 import com.zlingchun.mybatisplus.validator.enums.EnumString;
 import io.swagger.annotations.ApiModel;
@@ -13,10 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -29,9 +25,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder(value = {"id","cusName","cusPhone","sex","age","email","empId","status", "updateBy", "updateTime", "createBy", "createTime"})
-public class CustomerDto implements Serializable {
+public class CustomerQueryDto implements Serializable {
 
     private static final Long serializableId = 1L;
     /**
@@ -43,21 +37,17 @@ public class CustomerDto implements Serializable {
      * 客户名称
      */
     @ApiModelProperty(name = "cusName", value = "客户名称", position = 1)
-    @NotNull(message = "新增时员工名称不能为空", groups = {ValidGroup.Crud.Create.class})
-    @Length(message = "员工名称长度必须在2到10之间", min = 2, max = 10, groups = {ValidGroup.Crud.Create.class, ValidGroup.Crud.Update.class})
+    @Length(message = "员工名称长度必须在2到10之间", min = 2, max = 10, groups = {ValidGroup.Crud.Query.class})
     private String cusName;
     /**
      * 客户手机号
      */
     @ApiModelProperty(name = "cusPhone", value = "手机号", example = "133****7132", position = 2)
-    @NotNull(message = "新增客户时, 手机号不能为空", groups = {ValidGroup.Crud.Create.class})
-    @Pattern(message = "手机号不合法", regexp = "^((13[0-9])|(14[0,1,4-9])|(15[0-3,5-9])|(16[2,5,6,7])|(17[0-8])|(18[0-9])|(19[0-3,5-9]))\\d{8}$", groups = {ValidGroup.Crud.Create.class, ValidGroup.Crud.Update.class})
     private String cusPhone;
     /**
      * 客户性别：0：男；1：女
      */
     @ApiModelProperty(name = "sex", value = "性别：0：男；1：女", example = "男", position = 3)
-    @NotNull(message = "新增客户时, 性别不能为空", groups = {ValidGroup.Crud.Create.class})
     @EnumString(message="性别只允许为男或女", value = {"男","女"})
     private String sex;
     /**
@@ -70,7 +60,6 @@ public class CustomerDto implements Serializable {
      * 客户邮箱
      */
     @ApiModelProperty(name = "email", value = "客户邮箱", example = "***@qq.com", position = 5)
-    @Email(message = "邮箱格式不合法", groups = {ValidGroup.Crud.Create.class, ValidGroup.Crud.Update.class})
     private String email;
     /**
      * 外键， 员工id
@@ -104,4 +93,16 @@ public class CustomerDto implements Serializable {
     @ApiModelProperty(name = "createTime", value = "更新时间", position = 11, hidden=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String updateTime;
+    /**
+     * 页码，第几页
+     */
+    @ApiModelProperty(name = "pageNum", value = "页码", example = "1", position = 12)
+    @NotNull(message = "分页查询时, 页码不能为空", groups = {ValidGroup.Crud.Query.class})
+    private Integer pageNum;
+    /**
+     * 每页条数
+     */
+    @ApiModelProperty(name = "pageSize", value = "条数", example = "10", position = 13)
+    @NotNull(message = "分页查询时, 条数不能为空", groups = {ValidGroup.Crud.Query.class})
+    private Integer pageSize;
 }

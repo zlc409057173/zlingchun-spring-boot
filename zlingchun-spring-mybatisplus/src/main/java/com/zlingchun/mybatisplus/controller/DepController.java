@@ -3,7 +3,9 @@ package com.zlingchun.mybatisplus.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.constant.ResultConstant;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
+import com.zlingchun.mybatisplus.doman.dto.DepQueryDto;
 import com.zlingchun.mybatisplus.service.dto.IDepDtoService;
+import com.zlingchun.mybatisplus.validator.ValidGroup;
 import io.swagger.annotations.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -77,7 +79,7 @@ public class DepController {
             @ApiImplicitParam(name = "depDto", value = "需要更新的信息", required = true, paramType = "body", dataTypeClass = DepDto.class)
     })
     @PutMapping("{id}")
-    String updateDep(@PathVariable("id") Long id, @RequestBody @Valid DepDto depDto){
+    String updateDep(@PathVariable("id") Long id, @RequestBody @Validated(value = {ValidGroup.Crud.Update.class}) DepDto depDto){
         boolean update = depDtoService.update(id, depDto);
         return update ? ResultConstant.UPDATE.getDesc() : ResultConstant.UPDATEFAILED.getDesc();
     }
@@ -86,8 +88,8 @@ public class DepController {
             notes = "查询部门集合：根据输入部门条件查询出部门集合\n",
             httpMethod = "GET", responseContainer = "List", tags = {"查询"})
     @GetMapping("list")
-    List<DepDto> getDepList(DepDto depDto){
-        return depDtoService.list(depDto);
+    List<DepDto> getDepList(DepQueryDto depQueryDto){
+        return depDtoService.list(depQueryDto);
     }
 
     @ApiOperation(value = "分页查询部门",
@@ -95,8 +97,8 @@ public class DepController {
                     "分页查询必须输入pageNum和pageSize",
             httpMethod = "GET", response = Page.class, tags = {"查询"})
     @GetMapping("page")
-    Page<DepDto> getDepPage(DepDto depDto){
-        return depDtoService.page(depDto);
+    Page<DepDto> getDepPage(DepQueryDto depQueryDto){
+        return depDtoService.page(depQueryDto);
     }
 
     @ApiOperation(value = "查询单个部门信息",
@@ -109,6 +111,6 @@ public class DepController {
     })
     @GetMapping("{id}")
     DepDto getDepOne(@PathVariable("id") Long id, @RequestParam(required = false) String depNo, @RequestParam(required = false) String depName){
-        return depDtoService.findDepOne(DepDto.builder().id(id).depNo(depNo).depName(depName).build());
+        return depDtoService.findDepOne(DepQueryDto.builder().id(id).depNo(depNo).depName(depName).build());
     }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.constant.ResultConstant;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
 import com.zlingchun.mybatisplus.doman.dto.EmpDto;
+import com.zlingchun.mybatisplus.doman.dto.EmpQueryDto;
 import com.zlingchun.mybatisplus.service.dto.IEmpDtoService;
 import com.zlingchun.mybatisplus.validator.ValidGroup;
 import io.swagger.annotations.*;
@@ -86,8 +87,8 @@ public class EmpController {
             notes = "查询员工集合：根据输入员工条件查询出员工集合\n",
             httpMethod = "GET", responseContainer = "List", tags = {"查询"})
     @GetMapping("list")
-    List<EmpDto> getEmpList(EmpDto empDto){
-        return empDtoService.findEmpList(empDto);
+    List<EmpDto> getEmpList(EmpQueryDto empQueryDto){
+        return empDtoService.findEmpList(empQueryDto);
     }
 
     @ApiOperation(value = "关联分页查询员工",
@@ -95,11 +96,11 @@ public class EmpController {
                     "分页查询必须输入pageNum和pageSize",
             httpMethod = "GET", response = Page.class, tags = {"查询"})
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "empDto", value = "查询的部门条件", required = true, dataTypeClass = EmpDto.class)
+            @ApiImplicitParam(name = "empQueryDto", value = "查询的部门条件", required = true, dataTypeClass = EmpQueryDto.class)
     })
     @GetMapping("page")
-    Page<EmpDto> getEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpDto empDto){
-        return empDtoService.findEmpPage(empDto);
+    Page<EmpDto> getEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpQueryDto empQueryDto){
+        return empDtoService.findEmpPage(empQueryDto);
     }
 
     @ApiOperation(value = "关联查询单个员工信息",
@@ -112,7 +113,7 @@ public class EmpController {
     })
     @GetMapping("{id}")
     EmpDto getEmpOne(@PathVariable("id") Long id, @RequestParam(required = false) String empNo, @RequestParam(required = false) String empPhone){
-        return empDtoService.findEmpOne(EmpDto.builder().id(id).empNo(empNo).phone(empPhone).build());
+        return empDtoService.findEmpOne(EmpQueryDto.builder().id(id).empNo(empNo).phone(empPhone).build());
     }
 
     @ApiOperation(value = "分页查询员工",
@@ -120,22 +121,19 @@ public class EmpController {
                     "分页查询必须输入pageNum和pageSize",
             httpMethod = "GET", response = Page.class, tags = {"查询"})
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "empDto", value = "查询的部门条件", required = true, dataTypeClass = EmpDto.class)
+            @ApiImplicitParam(name = "empQueryDto", value = "查询的部门条件", required = true, dataTypeClass = EmpQueryDto.class)
     })
     @GetMapping("only/page")
-    Page<EmpDto> getOnlyEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpDto empDto){
-        return empDtoService.findOnlyEmpPage(empDto);
+    Page<EmpDto> getOnlyEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpQueryDto empQueryDto){
+        return empDtoService.findOnlyEmpPage(empQueryDto);
     }
 
     @ApiOperation(value = "查询员工集合",
             notes = "查询员工集合：根据输入员工条件查询出员工集合\n",
             httpMethod = "GET", responseContainer = "List", tags = {"查询"})
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "empDto", value = "查询的员工条件", required = true, dataTypeClass = EmpDto.class)
-    })
     @GetMapping("only/list")
-    List<EmpDto> getOnlyEmpList(@RequestBody EmpDto empDto){
-        return empDtoService.findOnlyEmpList(empDto);
+    List<EmpDto> getOnlyEmpList(EmpQueryDto empQueryDto){
+        return empDtoService.findOnlyEmpList(empQueryDto);
     }
 
     @ApiOperation(value = "查询单个员工信息",
@@ -148,6 +146,6 @@ public class EmpController {
     })
     @GetMapping("only/{id}")
     EmpDto getOnlyEmpOne(@PathVariable("id") Long id, @RequestParam(required = false) String empNo, @RequestParam(required = false) String empPhone){
-        return empDtoService.findOnlyEmpOne(EmpDto.builder().id(id).empNo(empNo).phone(empPhone).build());
+        return empDtoService.findOnlyEmpOne(EmpQueryDto.builder().id(id).empNo(empNo).phone(empPhone).build());
     }
 }

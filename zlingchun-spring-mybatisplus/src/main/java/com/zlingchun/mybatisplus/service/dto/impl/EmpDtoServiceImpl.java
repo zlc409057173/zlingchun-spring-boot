@@ -8,6 +8,7 @@ import com.zlingchun.mybatisplus.converter.mapstruct.EmpConvert;
 import com.zlingchun.mybatisplus.doman.dto.CustomerDto;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
 import com.zlingchun.mybatisplus.doman.dto.EmpDto;
+import com.zlingchun.mybatisplus.doman.dto.EmpQueryDto;
 import com.zlingchun.mybatisplus.doman.pojo.Emp;
 import com.zlingchun.mybatisplus.service.dto.ICustomerDtoService;
 import com.zlingchun.mybatisplus.service.dto.IDepDtoService;
@@ -72,7 +73,8 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
         //   1. 如果已经存在，那么就不能新增
         //   2. 不存在就新增，并设置EmpNo
         if(Objects.nonNull(empDto.getId()) || StringUtils.isNotEmpty(empDto.getEmpNo()) || StringUtils.isNotEmpty(empDto.getPhone())){
-            EmpDto empOne = this.findOnlyEmpOne(empDto);
+            EmpQueryDto empQueryDto = empConvert.empDto2EmpQueryDto(empDto);
+            EmpDto empOne = this.findOnlyEmpOne(empQueryDto);
             if(Objects.nonNull(empOne)){
                 log.debug("An Emp has the same EmpNo or Phone number, Emp = {}", JSON.toJSONString(empOne));
                 throw new IllegalArgumentException("An Emp has the same account or mobile phone number, EmpNo = "+empOne.getEmpNo());
@@ -100,7 +102,8 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean remove(EmpDto empDto) {
-        List<EmpDto> empDtos = this.findOnlyEmpList(empDto);
+        EmpQueryDto empQueryDto = empConvert.empDto2EmpQueryDto(empDto);
+        List<EmpDto> empDtos = this.findOnlyEmpList(empQueryDto);
         if(CollectionUtils.isEmpty(empDtos)){
             throw new IllegalArgumentException("No such Condition's Emp, " + JSON.toJSONString(empDto));
         }
@@ -112,7 +115,7 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean remove(Long id) {
-        EmpDto empDto = this.findOnlyEmpOne(EmpDto.builder().id(id).build());
+        EmpDto empDto = this.findOnlyEmpOne(EmpQueryDto.builder().id(id).build());
         if(Objects.isNull(empDto)){
             throw new IllegalArgumentException("The Emp has been deleted, id = " + id);
         }
@@ -157,17 +160,17 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Page<EmpDto> findEmpPage(EmpDto empDto) {
-        Emp emp = empConvert.empDto2Emp(empDto);
+    public Page<EmpDto> findEmpPage(EmpQueryDto empQueryDto) {
+        Emp emp = empConvert.empQueryDto2Emp(empQueryDto);
         // 分页
-        Page<Emp> emps = empService.selectEmpPage(emp, empDto.getPageNum(), empDto.getPageSize());
+        Page<Emp> emps = empService.selectEmpPage(emp, empQueryDto.getPageNum(), empQueryDto.getPageSize());
         return empConvert.emp2EmpDto(emps);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<EmpDto> findEmpList(EmpDto empDto) {
-        Emp emp = empConvert.empDto2Emp(empDto);
+    public List<EmpDto> findEmpList(EmpQueryDto empQueryDto) {
+        Emp emp = empConvert.empQueryDto2Emp(empQueryDto);
         if (Objects.isNull(emp)) return Collections.emptyList();
         List<Emp> emps = empService.selectEmpList(null, emp);
         return empConvert.emp2EmpDto(emps);
@@ -175,16 +178,16 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public EmpDto findEmpOne(EmpDto empDto) {
-        Emp emp = empConvert.empDto2Emp(empDto);
+    public EmpDto findEmpOne(EmpQueryDto empQueryDto) {
+        Emp emp = empConvert.empQueryDto2Emp(empQueryDto);
         Emp empOne = empService.selectEmpOne(emp);
         return empConvert.emp2EmpDto(empOne);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public EmpDto findOnlyEmpOne(EmpDto empDto) {
-        Emp emp = empConvert.empDto2Emp(empDto);
+    public EmpDto findOnlyEmpOne(EmpQueryDto empQueryDto) {
+        Emp emp = empConvert.empQueryDto2Emp(empQueryDto);
         LambdaQueryWrapper<Emp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Objects.nonNull(emp.getId()), Emp::getId, emp.getId())
                 .or()
@@ -197,8 +200,8 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<EmpDto> findOnlyEmpList(EmpDto empDto) {
-        Emp emp = empConvert.empDto2Emp(empDto);
+    public List<EmpDto> findOnlyEmpList(EmpQueryDto empQueryDto) {
+        Emp emp = empConvert.empQueryDto2Emp(empQueryDto);
         LambdaQueryWrapper<Emp> lambdaQueryWrapper = this.getWrapper(emp);
         List<Emp> emps = empService.list(lambdaQueryWrapper);
         return empConvert.emp2EmpDto(emps);
@@ -206,9 +209,9 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Page<EmpDto> findOnlyEmpPage(EmpDto empDto) {
-        Emp emp = empConvert.empDto2Emp(empDto);
-        Page<Emp> empPage = new Page<>(empDto.getPageNum(), empDto.getPageSize());
+    public Page<EmpDto> findOnlyEmpPage(EmpQueryDto empQueryDto) {
+        Emp emp = empConvert.empQueryDto2Emp(empQueryDto);
+        Page<Emp> empPage = new Page<>(empQueryDto.getPageNum(), empQueryDto.getPageSize());
         LambdaQueryWrapper<Emp> lambdaQueryWrapper = this.getWrapper(emp);
         Page<Emp> page = empService.page(empPage, lambdaQueryWrapper);
         return empConvert.emp2EmpDto(page);

@@ -2,6 +2,7 @@ package com.zlingchun.mybatisplus.service.dto;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.doman.dto.EmpDto;
+import com.zlingchun.mybatisplus.doman.dto.EmpQueryDto;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,43 +50,43 @@ public abstract class IEmpDtoService implements BaseService<EmpDto> {
 
     /**
      * 分页查询,带关联表查询
-     * @param empDto
+     * @param empQueryDto
      * @return
      */
-    public abstract Page<EmpDto> findEmpPage(EmpDto empDto);
+    public abstract Page<EmpDto> findEmpPage(EmpQueryDto empQueryDto);
 
     /**
      * 查询集合,带关联表查询
-     * @param empDto
+     * @param empQueryDto
      * @return
      */
-    public abstract List<EmpDto> findEmpList(EmpDto empDto);
+    public abstract List<EmpDto> findEmpList(EmpQueryDto empQueryDto);
 
     /**
      * 根据唯一字段查询唯一员工
-     * @param empDto
+     * @param empQueryDto
      * @return
      */
-    public abstract EmpDto findEmpOne(EmpDto empDto);
+    public abstract EmpDto findEmpOne(EmpQueryDto empQueryDto);
 
     /**
      * 查询单个Emp,不做关联查询
-     * @param empDto
+     * @param empQueryDto
      * @return
      */
-    public abstract EmpDto findOnlyEmpOne(EmpDto empDto);
+    public abstract EmpDto findOnlyEmpOne(EmpQueryDto empQueryDto);
 
     /**
      * 查询Emp List, 不做关联查询
-     * @param empDto
+     * @param empQueryDto
      * @return
      */
-    public abstract List<EmpDto> findOnlyEmpList(EmpDto empDto);
+    public abstract List<EmpDto> findOnlyEmpList(EmpQueryDto empQueryDto);
 
     /**
      * 分页查询, 不做关联查询
-     * @param empDto
+     * @param empQueryDto
      * @return
      */
-    public abstract Page<EmpDto> findOnlyEmpPage(EmpDto empDto);
+    public abstract Page<EmpDto> findOnlyEmpPage(EmpQueryDto empQueryDto);
 }

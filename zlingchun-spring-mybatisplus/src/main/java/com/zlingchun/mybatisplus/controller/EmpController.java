@@ -95,11 +95,8 @@ public class EmpController {
             notes = "分页查询员工：根据输入员工条件查询出员工集合\n" +
                     "分页查询必须输入pageNum和pageSize",
             httpMethod = "GET", response = Page.class, tags = {"查询"})
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "empQueryDto", value = "查询的部门条件", required = true, dataTypeClass = EmpQueryDto.class)
-    })
     @GetMapping("page")
-    Page<EmpDto> getEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpQueryDto empQueryDto){
+    Page<EmpDto> getEmpPage(EmpQueryDto empQueryDto){
         return empDtoService.findEmpPage(empQueryDto);
     }
 
@@ -120,11 +117,8 @@ public class EmpController {
             notes = "分页查询员工：根据输入员工条件查询出员工集合\n" +
                     "分页查询必须输入pageNum和pageSize",
             httpMethod = "GET", response = Page.class, tags = {"查询"})
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(name = "empQueryDto", value = "查询的部门条件", required = true, dataTypeClass = EmpQueryDto.class)
-    })
     @GetMapping("only/page")
-    Page<EmpDto> getOnlyEmpPage(@RequestBody @Validated(value = {ValidGroup.Crud.Query.class}) EmpQueryDto empQueryDto){
+    Page<EmpDto> getOnlyEmpPage(EmpQueryDto empQueryDto){
         return empDtoService.findOnlyEmpPage(empQueryDto);
     }
 

@@ -2,6 +2,8 @@ package com.zlingchun.mybatisplus.service.dto;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zlingchun.mybatisplus.doman.dto.EmpDto;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +35,9 @@ public abstract class IEmpDtoService implements BaseService<EmpDto> {
      */
     public abstract boolean remove(Long id);
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public abstract boolean removeByDepId(List<Long> depIds);
+
     /**
      * 更新
      *
@@ -58,19 +63,17 @@ public abstract class IEmpDtoService implements BaseService<EmpDto> {
 
     /**
      * 根据唯一字段查询唯一员工
-     * @param id
+     * @param empDto
      * @return
      */
-    public abstract EmpDto findEmpOne(Long id, String empNo, String empPhone);
+    public abstract EmpDto findEmpOne(EmpDto empDto);
 
     /**
      * 查询单个Emp,不做关联查询
-     * @param id
-     * @param empNo
-     * @param empPhone
+     * @param empDto
      * @return
      */
-    public abstract EmpDto findOnlyEmpOne(Long id, String empNo, String empPhone);
+    public abstract EmpDto findOnlyEmpOne(EmpDto empDto);
 
     /**
      * 查询Emp List, 不做关联查询

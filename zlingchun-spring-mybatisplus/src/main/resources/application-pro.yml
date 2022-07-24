@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 8091
 
 spring:
   # 初始化脚本配置
@@ -14,9 +14,6 @@ spring:
       encoding: UTF-8
       # always:每次应用一启动就执行上面两个脚本; never/embedded:表示不执行脚本
       mode: never
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   # 返回前端数据JSON Date日期格式化配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
@@ -120,16 +117,16 @@ custom:
     machine-id: 1
     data-center-id: 1
   swagger:
-    enable: true
+    enable: false
 mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations:
     - classpath*:/mapper/**/*.xml
   type-aliases-package: com.zlingchun.mybatisplus.doman.pojo
   # 设置mybatis-plus全局配置
   global-config:
-    banner: true
+    banner: false
     db-config:
       # 这样配置之后实体类不需要再使用@TableName，但是所有的表都会对应以t_类名 开头的表
       table-prefix: t_

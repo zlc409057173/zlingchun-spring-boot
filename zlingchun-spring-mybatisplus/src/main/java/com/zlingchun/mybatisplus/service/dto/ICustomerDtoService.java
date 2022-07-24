@@ -1,6 +1,8 @@
 package com.zlingchun.mybatisplus.service.dto;
 
 import com.zlingchun.mybatisplus.doman.dto.CustomerDto;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,7 +15,6 @@ public interface ICustomerDtoService {
 
     boolean save(List<CustomerDto> customerDtos);
 
-    boolean saveBatch(List<CustomerDto> customerDtos);
-
-    boolean remove(List<CustomerDto> customerDtos);
+    @Transactional(propagation = Propagation.REQUIRED)
+    boolean removeByEmpId(List<Long> empIds);
 }

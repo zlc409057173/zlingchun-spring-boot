@@ -1,21 +1,26 @@
 package com.zlingchun.mybatisplus.service.dto.impl;
 
 import cn.hutool.core.lang.Snowflake;
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zlingchun.mybatisplus.converter.mapstruct.EmpToEmpDto;
+import com.zlingchun.mybatisplus.converter.mapstruct.DepConvert;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
 import com.zlingchun.mybatisplus.doman.pojo.Dep;
 import com.zlingchun.mybatisplus.service.dto.IDepDtoService;
+import com.zlingchun.mybatisplus.service.dto.IEmpDtoService;
 import com.zlingchun.mybatisplus.service.pojo.IDepService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * @author achun
@@ -29,7 +34,10 @@ public class DepDtoServiceImpl implements IDepDtoService {
     IDepService depService;
 
     @Resource
-    EmpToEmpDto empToEmpDto;
+    DepConvert depConvert;
+
+    @Resource
+    IEmpDtoService empDtoService;
 
     @Resource
     Snowflake snowflake;
@@ -61,7 +69,7 @@ public class DepDtoServiceImpl implements IDepDtoService {
         // 通过雪花算法生成一个数，再截取8位后的数
         depDto.setDepNo(snowflake.nextIdStr().substring(8));
         depDto.setId(null); // 防止新增时传入Id
-        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        Dep dep = depConvert.depDto2Dep(depDto);
         // 新增
         boolean save = depService.save(dep);
         if(save){
@@ -69,6 +77,44 @@ public class DepDtoServiceImpl implements IDepDtoService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean remove(DepDto depDto) {
+        List<DepDto> depDtos = this.list(depDto);
+        if(CollectionUtils.isEmpty(depDtos)){
+            throw new IllegalArgumentException("No such Condition's Emp, " + JSON.toJSONString(depDto));
+        }
+        List<Long> ids = depDtos.stream().map(DepDto::getId).collect(Collectors.toList());
+        boolean removeEmp = empDtoService.removeByDepId(ids);
+        boolean removeDep = depService.removeBatchByIds(ids, 100);
+        return removeEmp && removeDep;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean remove(Long id) {
+        DepDto depDto = this.findDepOne(DepDto.builder().id(id).build());
+        if(Objects.isNull(depDto)){
+            throw new IllegalArgumentException("This Dep has been deleted!");
+        }
+        boolean removeEmp = empDtoService.removeByDepId(Arrays.asList(id));
+        boolean removeDep = depService.removeById(id);
+        return removeEmp && removeDep;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean update(Long id, DepDto depDto) {
+        DepDto depOne = this.findDepOne(depDto);
+        if(Objects.nonNull(depOne)){
+            throw new IllegalArgumentException("You can't update the Dep, The Dep name has existed!");
+        }
+        LambdaQueryWrapper<Dep> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Dep::getId, id);
+        Dep dep = depConvert.depDto2Dep(depDto);
+        return depService.update(dep, lambdaQueryWrapper);
     }
 
     /**
@@ -81,63 +127,36 @@ public class DepDtoServiceImpl implements IDepDtoService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public DepDto findDepOne(DepDto depDto){
-        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        Dep dep = depConvert.depDto2Dep(depDto);
         LambdaQueryWrapper<Dep> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Objects.nonNull(dep.getId()), Dep::getId, dep.getId())
-        .or()
-        .eq(StringUtils.isNotBlank(dep.getDepNo()), Dep::getDepNo, dep.getDepNo())
-        .or()
-        .eq(StringUtils.isNotBlank(dep.getDepName()), Dep::getDepName, dep.getDepName());
+                .or()
+                .eq(StringUtils.isNotBlank(dep.getDepNo()), Dep::getDepNo, dep.getDepNo())
+                .or()
+                .eq(StringUtils.isNotBlank(dep.getDepName()), Dep::getDepName, dep.getDepName());
         Dep one = depService.getOne(lambdaQueryWrapper);
-        return empToEmpDto.dep2DepDto(one);
-    }
-
-    @Override
-    public boolean remove(DepDto depDto) {
-        Dep dep = empToEmpDto.depDto2Dep(depDto);
-        LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
-        return depService.remove(lambdaQueryWrapper);
-    }
-
-    @Override
-    public boolean remove(Long id) {
-        Dep dep = depService.getById(id);
-        if(Objects.isNull(dep)){
-            throw new IllegalArgumentException("This Dep has been deleted!");
-        }
-        return depService.removeById(id);
-    }
-
-    @Override
-    public boolean update(Long id, DepDto depDto) {
-        DepDto depOne = this.findDepOne(depDto);
-        if(Objects.nonNull(depOne)){
-            throw new IllegalArgumentException("You can't update the Dep, The Dep name has existed!");
-        }
-        LambdaQueryWrapper<Dep> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Dep::getId, id);
-        Dep dep = empToEmpDto.depDto2Dep(depDto);
-        return depService.update(dep, lambdaQueryWrapper);
+        return depConvert.dep2DepDto(one);
     }
 
     @Override
     public List<DepDto> list(DepDto depDto) {
-        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        Dep dep = depConvert.depDto2Dep(depDto);
         LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
         List<Dep> deps = depService.list(lambdaQueryWrapper);
-        return empToEmpDto.dep2DepDto(deps);
+        return depConvert.dep2DepDto(deps);
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Page<DepDto> page(DepDto depDto) {
         if(Objects.isNull(depDto.getPageNum()) || Objects.isNull(depDto.getPageSize())) {
             throw new IllegalArgumentException("The pageNum and pageSize can't empty while Page look!");
         }
-        Dep dep = empToEmpDto.depDto2Dep(depDto);
+        Dep dep = depConvert.depDto2Dep(depDto);
         LambdaQueryWrapper<Dep> lambdaQueryWrapper = this.getWrapper(dep);
         Page<Dep> page = new Page<>(depDto.getPageNum(), depDto.getPageSize());
         Page<Dep> depPage = depService.page(page, lambdaQueryWrapper);
-        return empToEmpDto.dep2DepDto(depPage);
+        return depConvert.dep2DepDto(depPage);
     }
 
     private LambdaQueryWrapper<Dep> getWrapper(Dep dep){

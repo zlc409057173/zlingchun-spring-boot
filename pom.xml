@@ -49,6 +49,8 @@
         <guava-version>31.1-jre</guava-version>
         <pinyin4j-version>2.5.1</pinyin4j-version>
         <mybatis-plus-version>3.5.1</mybatis-plus-version>
+        <springfox-version>3.0.0</springfox-version>
+        <swager-model-version>1.5.22</swager-model-version>
     </properties>
 
     <dependencyManagement>
@@ -185,6 +187,32 @@
                 <version>${pinyin4j-version}</version>
             </dependency>
 
+            <!-- swagger2 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox-version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-models</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-annotations</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swager-model-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <repositories>

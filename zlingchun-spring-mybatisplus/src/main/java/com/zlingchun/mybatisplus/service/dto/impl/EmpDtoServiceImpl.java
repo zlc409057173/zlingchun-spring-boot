@@ -4,11 +4,10 @@ import cn.hutool.core.lang.Snowflake;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zlingchun.mybatisplus.converter.mapstruct.EmpToEmpDto;
+import com.zlingchun.mybatisplus.converter.mapstruct.EmpConvert;
 import com.zlingchun.mybatisplus.doman.dto.CustomerDto;
 import com.zlingchun.mybatisplus.doman.dto.DepDto;
 import com.zlingchun.mybatisplus.doman.dto.EmpDto;
-import com.zlingchun.mybatisplus.doman.pojo.Customer;
 import com.zlingchun.mybatisplus.doman.pojo.Emp;
 import com.zlingchun.mybatisplus.service.dto.ICustomerDtoService;
 import com.zlingchun.mybatisplus.service.dto.IDepDtoService;
@@ -22,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -49,11 +49,11 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
     Snowflake snowflake;
 
     @Resource
-    EmpToEmpDto empToEmpDto;
+    EmpConvert empConvert;
 
     @Override
     public boolean saveBatch(List<EmpDto> empDtos) {
-        List<Emp> emps = empToEmpDto.empDto2Emp(empDtos);
+        List<Emp> emps = empConvert.empDto2Emp(empDtos);
         return empService.saveBatch(emps, 100);
     }
 
@@ -72,14 +72,14 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
         //   1. 如果已经存在，那么就不能新增
         //   2. 不存在就新增，并设置EmpNo
         if(Objects.nonNull(empDto.getId()) || StringUtils.isNotEmpty(empDto.getEmpNo()) || StringUtils.isNotEmpty(empDto.getPhone())){
-            EmpDto empOne = this.findOnlyEmpOne(empDto.getId(), empDto.getEmpNo(), empDto.getPhone());
+            EmpDto empOne = this.findOnlyEmpOne(empDto);
             if(Objects.nonNull(empOne)){
                 log.debug("An Emp has the same EmpNo or Phone number, Emp = {}", JSON.toJSONString(empOne));
                 throw new IllegalArgumentException("An Emp has the same account or mobile phone number, EmpNo = "+empOne.getEmpNo());
             }
         }
         empDto.setEmpNo(snowflake.nextIdStr().substring(8));
-        Emp emp = empToEmpDto.empDto2Emp(empDto);
+        Emp emp = empConvert.empDto2Emp(empDto);
         emp.setDepId(depDto.getId()); //设置员工的部门Id
         // 新增员工信息
         boolean saveEmp = empService.save(emp);
@@ -100,43 +100,46 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean remove(EmpDto empDto) {
-        Emp emp = empToEmpDto.empDto2Emp(empDto);
-        List<Emp> emps = empService.selectEmpList(null, emp);
-        if(CollectionUtils.isEmpty(emps)){
-            throw new IllegalArgumentException("No such Condition's Emp, " + JSON.toJSONString(emp));
+        List<EmpDto> empDtos = this.findOnlyEmpList(empDto);
+        if(CollectionUtils.isEmpty(empDtos)){
+            throw new IllegalArgumentException("No such Condition's Emp, " + JSON.toJSONString(empDto));
         }
-        boolean removeBatchCust = true;
-        List<Customer> customers = emps.stream().flatMap(emp1 -> emp1.getCustomers().stream()).collect(Collectors.toList());
-        if(!CollectionUtils.isEmpty(customers)){
-            List<CustomerDto> customerDtos = empToEmpDto.customer2CustomerDto(customers);
-            removeBatchCust = customerDtoService.remove(customerDtos);
-        }
-        List<Long> ids = emps.stream().map(Emp::getId).collect(Collectors.toList());
-        boolean removeBatchEmp = empService.removeBatchByIds(ids,100);
-        return removeBatchCust && removeBatchEmp;
+        List<Long> ids = empDtos.stream().map(EmpDto::getId).collect(Collectors.toList());
+        customerDtoService.removeByEmpId(ids);
+        return empService.removeBatchByIds(ids,100);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean remove(Long id) {
-        Emp emp = empService.selectEmpOne(Emp.builder().id(id).build());
-        if(Objects.isNull(emp)){
+        EmpDto empDto = this.findOnlyEmpOne(EmpDto.builder().id(id).build());
+        if(Objects.isNull(empDto)){
             throw new IllegalArgumentException("The Emp has been deleted, id = " + id);
         }
-        List<Customer> customers = emp.getCustomers();
-        boolean removeCust = true;
-        if(!CollectionUtils.isEmpty(customers)){
-            List<CustomerDto> customerDtos = empToEmpDto.customer2CustomerDto(customers);
-            removeCust = customerDtoService.remove(customerDtos);
+        customerDtoService.removeByEmpId(Arrays.asList(id));
+        return empService.removeById(id);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean removeByDepId(List<Long> depIds) {
+        LambdaQueryWrapper<Emp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.in(CollectionUtils.isEmpty(depIds), Emp::getDepId, depIds);
+        List<Emp> emps = empService.list(lambdaQueryWrapper);
+        if(CollectionUtils.isEmpty(emps)){
+            log.info("These emps are in the deleted state, depId in ({})", JSON.toJSONString(depIds));
+            return true;
         }
-        boolean removeEmp = empService.removeById(emp);
-        return removeCust && removeEmp;
+        List<Long> empIds = emps.stream().map(Emp::getId).collect(Collectors.toList());
+        boolean removeCusts = customerDtoService.removeByEmpId(empIds);
+        boolean removeEmps = empService.removeBatchByIds(empIds, 100);
+        return removeCusts && removeEmps;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean update(Long id, EmpDto empDto) {
-        Emp emp = empToEmpDto.empDto2Emp(empDto);
+        Emp emp = empConvert.empDto2Emp(empDto);
         if(StringUtils.isNotBlank(emp.getEmpNo()) || StringUtils.isNotBlank(emp.getEmpPhone())){
             LambdaQueryWrapper<Emp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
             lambdaQueryWrapper.eq(StringUtils.isNotBlank(emp.getEmpNo()), Emp::getEmpNo, emp.getEmpNo()).or()
@@ -155,58 +158,60 @@ public class EmpDtoServiceImpl extends IEmpDtoService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public Page<EmpDto> findEmpPage(EmpDto empDto) {
-        Emp emp = empToEmpDto.empDto2Emp(empDto);
+        Emp emp = empConvert.empDto2Emp(empDto);
         // 分页
         Page<Emp> emps = empService.selectEmpPage(emp, empDto.getPageNum(), empDto.getPageSize());
-        return empToEmpDto.emp2EmpDto(emps);
+        return empConvert.emp2EmpDto(emps);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<EmpDto> findEmpList(EmpDto empDto) {
-        Emp emp = empToEmpDto.empDto2Emp(empDto);
+        Emp emp = empConvert.empDto2Emp(empDto);
         if (Objects.isNull(emp)) return Collections.emptyList();
         List<Emp> emps = empService.selectEmpList(null, emp);
-        return empToEmpDto.emp2EmpDto(emps);
+        return empConvert.emp2EmpDto(emps);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public EmpDto findEmpOne(Long id, String empNo, String empPhone) {
-        Emp empOne = empService.selectEmpOne(Emp.builder().id(id).empNo(empNo).empPhone(empPhone).build());
-        return empToEmpDto.emp2EmpDto(empOne);
+    public EmpDto findEmpOne(EmpDto empDto) {
+        Emp emp = empConvert.empDto2Emp(empDto);
+        Emp empOne = empService.selectEmpOne(emp);
+        return empConvert.emp2EmpDto(empOne);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public EmpDto findOnlyEmpOne(Long id, String empNo, String empPhone) {
+    public EmpDto findOnlyEmpOne(EmpDto empDto) {
+        Emp emp = empConvert.empDto2Emp(empDto);
         LambdaQueryWrapper<Emp> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Objects.nonNull(id), Emp::getId, id)
+        lambdaQueryWrapper.eq(Objects.nonNull(emp.getId()), Emp::getId, emp.getId())
                 .or()
-                .eq(StringUtils.isNotBlank(empNo), Emp::getEmpNo, empNo)
+                .eq(StringUtils.isNotBlank(emp.getEmpNo()), Emp::getEmpNo, emp.getEmpNo())
                 .or()
-                .eq(StringUtils.isNotBlank(empPhone), Emp::getEmpPhone, empPhone);
-        Emp emp = empService.getOne(lambdaQueryWrapper);
-        return empToEmpDto.emp2EmpDto(emp);
+                .eq(StringUtils.isNotBlank(emp.getEmpPhone()), Emp::getEmpPhone, emp.getEmpPhone());
+        Emp one = empService.getOne(lambdaQueryWrapper);
+        return empConvert.emp2EmpDto(one);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<EmpDto> findOnlyEmpList(EmpDto empDto) {
-        Emp emp = empToEmpDto.empDto2Emp(empDto);
+        Emp emp = empConvert.empDto2Emp(empDto);
         LambdaQueryWrapper<Emp> lambdaQueryWrapper = this.getWrapper(emp);
         List<Emp> emps = empService.list(lambdaQueryWrapper);
-        return empToEmpDto.emp2EmpDto(emps);
+        return empConvert.emp2EmpDto(emps);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public Page<EmpDto> findOnlyEmpPage(EmpDto empDto) {
-        Emp emp = empToEmpDto.empDto2Emp(empDto);
+        Emp emp = empConvert.empDto2Emp(empDto);
         Page<Emp> empPage = new Page<>(empDto.getPageNum(), empDto.getPageSize());
         LambdaQueryWrapper<Emp> lambdaQueryWrapper = this.getWrapper(emp);
         Page<Emp> page = empService.page(empPage, lambdaQueryWrapper);
-        return empToEmpDto.emp2EmpDto(page);
+        return empConvert.emp2EmpDto(page);
     }
 
     private LambdaQueryWrapper<Emp> getWrapper(Emp emp){

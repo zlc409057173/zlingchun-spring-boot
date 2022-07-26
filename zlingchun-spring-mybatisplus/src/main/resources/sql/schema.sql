@@ -59,3 +59,18 @@ CREATE TABLE `t_dep` (
 
 ALTER TABLE `t_emp` ADD CONSTRAINT `fk_t_emp_t_dep_1` FOREIGN KEY (`dep_id`) REFERENCES `t_dep` (`did`);
 ALTER TABLE `t_customer` ADD CONSTRAINT `fk_t_cus_t_emp_1` FOREIGN KEY (`emp_id`) REFERENCES `t_emp` (`eid`);
+
+CREATE TABLE `t_user` (
+    `uid` bigint NOT NULL COMMENT '主键id',
+    `user_code` varchar(32) NOT NULL COMMENT '用户编码',
+    `user_name` varchar(128) NOT NULL COMMENT '用户名',
+    `password` varchar(256) NOT NULL COMMENT '密码',
+    `role_id` bigint NULL COMMENT '角色id',
+    `version` int(5) NOT NULL DEFAULT '0' COMMENT '版本号',
+    `status` char(1) NOT NULL DEFAULT '0' COMMENT '客户状态：0：正常；1：删除',
+    `createBy` varchar(64) NULL DEFAULT '' COMMENT '创建人',
+    `createTime` datetime NULL COMMENT '创建时间',
+    `updateBy` varchar(64) NULL DEFAULT '' COMMENT '更新人',
+    `updateTime` datetime NULL COMMENT '更新时间',
+    PRIMARY KEY (`uid`)
+);

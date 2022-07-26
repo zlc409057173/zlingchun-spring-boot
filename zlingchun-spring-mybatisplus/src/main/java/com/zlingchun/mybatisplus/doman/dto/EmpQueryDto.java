@@ -35,7 +35,7 @@ public class EmpQueryDto implements Serializable {
     /**
      * 员工名称
      */
-    @ApiModelProperty(name = "empName", value = "员工名称", example = "张三(最大不超过10位)", position = 1)
+    @ApiModelProperty(name = "empName", value = "员工名称", example = "张三", position = 1)
     @Length(message = "员工名称长度必须在2到10之间", min = 2, max = 10, groups = {ValidGroup.Crud.Query.class})
     private String empName;
     /**
@@ -46,7 +46,7 @@ public class EmpQueryDto implements Serializable {
     /**
      * 手机号
      */
-    @ApiModelProperty(name = "phone", value = "手机号", example = "133****7132", position = 3)
+    @ApiModelProperty(name = "phone", value = "手机号", position = 3)
     private String phone;
     /**
      * 薪资
@@ -69,7 +69,7 @@ public class EmpQueryDto implements Serializable {
     /**
      * 生日日期
      */
-    @ApiModelProperty(name = "birth", value = "生日日期", example = "yyyy-MM-dd", position = 7)
+    @ApiModelProperty(name = "birth", value = "生日日期", position = 7)
 //    ^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29))\\s+([0-1]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$
     @Pattern(regexp = "^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29))$",
             message = "出生日期格式应为：yyyy-MM-dd")
@@ -83,7 +83,7 @@ public class EmpQueryDto implements Serializable {
     /**
      * 客户邮箱
      */
-    @ApiModelProperty(name = "email", value = "邮箱", example = "***@qq.com", position = 9)
+    @ApiModelProperty(name = "email", value = "邮箱", position = 9)
     private String email;
     /**
      * 部门主键

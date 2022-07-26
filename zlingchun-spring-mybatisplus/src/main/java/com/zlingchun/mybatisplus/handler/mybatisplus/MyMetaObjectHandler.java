@@ -1,6 +1,7 @@
 package com.zlingchun.mybatisplus.handler.mybatisplus;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.zlingchun.mybatisplus.config.UserContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -16,14 +17,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.debug("start insert fill ....");
         //如果属性有值则不覆盖,如果填充值为null则不填充
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now()); // 起始版本 3.3.0(推荐使用)
-        this.strictInsertFill(metaObject, "createBy", ()-> {
-            try{
-                //这里是我自己项目获取当前session用户id的方法
-                return "CreateUser";
-            }catch(Exception ignored){
-            }
-            return null;
-        }, String.class);
+        this.strictInsertFill(metaObject, "createBy", ()-> UserContext.get().getUserName(), String.class);
 //        this.strictInsertFill(metaObject, "version", Integer.class, 0);
     }
     //更新时候启动
@@ -32,13 +26,6 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         log.debug("start update fill ....");
         //直接调用setFieldValByName方法，跳过null判断，强制更新updateTime为当前时间
         this.setFieldValByName("updateTime", LocalDateTime.now(), metaObject);
-        this.strictUpdateFill(metaObject, "updateBy", ()-> {
-            try{
-                //这里是我自己项目获取当前session用户id的方法
-                return "UpdateUser";
-            }catch(Exception ignored){
-            }
-            return null;
-        }, String.class);
+        this.strictUpdateFill(metaObject, "updateBy", ()-> UserContext.get().getUserName(), String.class);
     }
 }

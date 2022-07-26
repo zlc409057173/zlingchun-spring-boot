@@ -41,12 +41,18 @@ public enum ReturnCode {
      * 服务异常
      **/
     RC500(500, "系统异常，请稍后重试"),
-
     INVALID_TOKEN(2001, "访问令牌不合法"),
-    ACCESS_DENIED(2003, "没有权限访问该资源"),
+    TOKEN_EXPIRED(2002, "访问令牌已过期"),
+    TOKEN_UNSUPPORTED(2003, "访问令牌不合法"),
+    TOKEN_MALFORMED(2004, "访问令牌格式不合法"),
+    TOKEN_SIGNATURE(2005, "访问令牌签名错误"),
+    TOKEN_ILLEGALARGUMENT(2006, "没有权限访问该资源"),
+    TOKEN_EMPTY(2007, "访问令牌为空"),
     CLIENT_AUTHENTICATION_FAILED(1001, "客户端认证失败"),
     USERNAME_OR_PASSWORD_ERROR(1002, "用户名或密码错误"),
-    UNSUPPORTED_GRANT_TYPE(1003, "不支持的认证模式");
+    UNSUPPORTED_GRANT_TYPE(1003, "不支持的认证模式"),
+    USER_NOT_EXIST(1004, "用户不存在")
+    ;
 
 
     /**

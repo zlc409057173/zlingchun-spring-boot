@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,7 +58,7 @@ public class EmailController {
      * 发送附件 邮件发送
      */
     @PostMapping("/enclosure")
-    public JsonReturn enclosureEmail(ToEmail toEmail, MultipartFile multipartFile) {
+    public JsonReturn enclosureEmail(ToEmail toEmail, @RequestPart MultipartFile multipartFile) {
         try {
             toEmailService.enclosureEmail(toEmail, multipartFile);
             return JsonReturn.buildSuccess(Arrays.toString(toEmail.getTos()) + toEmail.getContent(), "附件邮件成功");
